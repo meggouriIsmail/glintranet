@@ -69,6 +69,7 @@ public class FAQServiceImpl implements FAQService {
 			}
 
 			return faqMapper.entityToResponse(faq);
+			//werioh
 		}
 	}
 
