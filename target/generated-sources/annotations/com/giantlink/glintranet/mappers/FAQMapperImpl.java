@@ -1,9 +1,12 @@
 package com.giantlink.glintranet.mappers;
 
+import com.giantlink.glintranet.entities.Employee;
 import com.giantlink.glintranet.entities.FAQ;
 import com.giantlink.glintranet.entities.FAQ.FAQBuilder;
 import com.giantlink.glintranet.entities.Tag;
 import com.giantlink.glintranet.requests.FAQRequest;
+import com.giantlink.glintranet.responses.EmployeeResSimplified;
+import com.giantlink.glintranet.responses.EmployeeResSimplified.EmployeeResSimplifiedBuilder;
 import com.giantlink.glintranet.responses.FAQResponse;
 import com.giantlink.glintranet.responses.FAQResponse.FAQResponseBuilder;
 import java.util.ArrayList;
@@ -15,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-06-23T13:26:34+0100",
+    date = "2022-06-23T13:35:38+0100",
     comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.50.v20210914-1429, environment: Java 17.0.1 (Eclipse Adoptium)"
 )
 @Component
@@ -48,7 +51,7 @@ public class FAQMapperImpl implements FAQMapper {
 
         fAQResponse.content( faq.getContent() );
         fAQResponse.description( faq.getDescription() );
-        fAQResponse.employee( faq.getEmployee() );
+        fAQResponse.employee( employeeToEmployeeResSimplified( faq.getEmployee() ) );
         fAQResponse.id( faq.getId() );
         fAQResponse.postingDate( faq.getPostingDate() );
         fAQResponse.status( faq.getStatus() );
@@ -73,5 +76,25 @@ public class FAQMapperImpl implements FAQMapper {
         }
 
         return list;
+    }
+
+    protected EmployeeResSimplified employeeToEmployeeResSimplified(Employee employee) {
+        if ( employee == null ) {
+            return null;
+        }
+
+        EmployeeResSimplifiedBuilder employeeResSimplified = EmployeeResSimplified.builder();
+
+        employeeResSimplified.CIN( employee.getCIN() );
+        employeeResSimplified.birthDate( employee.getBirthDate() );
+        employeeResSimplified.email( employee.getEmail() );
+        employeeResSimplified.firstName( employee.getFirstName() );
+        employeeResSimplified.id( employee.getId() );
+        employeeResSimplified.lastName( employee.getLastName() );
+        employeeResSimplified.password( employee.getPassword() );
+        employeeResSimplified.phoneNumber( employee.getPhoneNumber() );
+        employeeResSimplified.username( employee.getUsername() );
+
+        return employeeResSimplified.build();
     }
 }
