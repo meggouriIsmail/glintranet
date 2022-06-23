@@ -35,6 +35,8 @@ public class Employee
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 	
+	// Box box
+	
 	@Size(min = 3, max = 15)
 	@Column(nullable = false)
 	private String firstName;
