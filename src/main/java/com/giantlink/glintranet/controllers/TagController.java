@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.giantlink.glintranet.entities.Tag;
 import com.giantlink.glintranet.requests.TagRequest;
 import com.giantlink.glintranet.responses.TagResponse;
 import com.giantlink.glintranet.services.TagService;

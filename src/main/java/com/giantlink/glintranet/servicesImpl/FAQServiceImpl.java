@@ -115,7 +115,7 @@ public class FAQServiceImpl implements FAQService {
 		updatedFaq.setStatus(faqRequest.getStatus());
 
 		updatedFaq.setEmployee(foundEmp.get());
-		// updatedFaq.setSection(foundSec.get());
+		updatedFaq.setSection(foundSec.get());
 
 		faqRepository.save(updatedFaq);
 
@@ -129,13 +129,14 @@ public class FAQServiceImpl implements FAQService {
 	}
 
 	@Override
-	public void voteDown(Long id) {
+	public FAQResponse voteDown(Long id) {
 		FAQ faq = faqRepository.getById(id);
 		int vote = faq.getVotes();
 		vote--;
 		faq.setVotes(vote);
 		faqRepository.save(faq);
 
+		return faqMapper.entityToResponse(faq);
 	}
 
 	@Override

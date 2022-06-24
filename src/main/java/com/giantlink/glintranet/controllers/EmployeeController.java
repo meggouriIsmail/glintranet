@@ -21,8 +21,6 @@ import com.giantlink.glintranet.requests.EmployeeRequest;
 import com.giantlink.glintranet.responses.EmployeeResponse;
 import com.giantlink.glintranet.services.EmployeeService;
 
-import lombok.AllArgsConstructor;
-
 @RestController
 @RequestMapping("/api/employee")
 

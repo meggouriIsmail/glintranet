@@ -33,13 +33,11 @@ public class FAQRequest
 	
 	private int votes;
 
-	
 	@Column(nullable = false)
 	private Boolean status;
 	
 	@NotNull
 	private Long employee_id;
-
 
 	private Long section_id;
 	

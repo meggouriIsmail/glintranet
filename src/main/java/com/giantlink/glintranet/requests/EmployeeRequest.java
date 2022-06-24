@@ -6,8 +6,6 @@ import java.util.Date;
 import javax.persistence.Column;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.CreationTimestamp;
-
 import lombok.Builder;
 import lombok.Data;
 

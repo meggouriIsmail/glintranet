@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.giantlink.glintranet.entities.FAQ;
 import com.giantlink.glintranet.requests.FAQRequest;
 import com.giantlink.glintranet.responses.FAQResponse;
 import com.giantlink.glintranet.services.FAQService;
@@ -68,8 +67,7 @@ public class FAQController
 	@PutMapping("/down/{id}")
 	public ResponseEntity<?> voteDown(@PathVariable Long id)
 	{
-		faqService.voteDown(id);
-		return new ResponseEntity<>(HttpStatus.ACCEPTED);
+		return new ResponseEntity<>(faqService.voteDown(id), HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")
