@@ -1,6 +1,7 @@
 package com.giantlink.glintranet.responses;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import com.giantlink.glintranet.entities.Tag;
@@ -24,6 +25,10 @@ public class FAQResponse
 	private Boolean status;
 	
 	private EmployeeResSimplified employee;
+	
+	private SectionResponse section;
+
+	private List<CommentResponse> comments;
 	
 	private Set<Tag> tags;
 }
