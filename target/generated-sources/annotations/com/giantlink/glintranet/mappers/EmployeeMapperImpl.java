@@ -3,9 +3,14 @@ package com.giantlink.glintranet.mappers;
 import com.giantlink.glintranet.entities.Employee;
 import com.giantlink.glintranet.entities.Employee.EmployeeBuilder;
 import com.giantlink.glintranet.entities.FAQ;
+import com.giantlink.glintranet.entities.Team;
 import com.giantlink.glintranet.requests.EmployeeRequest;
+import com.giantlink.glintranet.responses.EmployeeResSimplified;
+import com.giantlink.glintranet.responses.EmployeeResSimplified.EmployeeResSimplifiedBuilder;
 import com.giantlink.glintranet.responses.EmployeeResponse;
 import com.giantlink.glintranet.responses.EmployeeResponse.EmployeeResponseBuilder;
+import com.giantlink.glintranet.responses.TeamResSimplified;
+import com.giantlink.glintranet.responses.TeamResSimplified.TeamResSimplifiedBuilder;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -15,7 +20,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-06-23T16:06:06+0100",
+    date = "2022-06-26T17:35:52+0100",
     comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.0.v20210708-0430, environment: Java 17 (Eclipse Adoptium)"
 )
 @Component
@@ -61,6 +66,7 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         employeeResponse.lastName( employee.getLastName() );
         employeeResponse.password( employee.getPassword() );
         employeeResponse.phoneNumber( employee.getPhoneNumber() );
+        employeeResponse.team( teamToTeamResSimplified( employee.getTeam() ) );
         employeeResponse.username( employee.getUsername() );
 
         return employeeResponse.build();
@@ -78,5 +84,95 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         }
 
         return list;
+    }
+
+    @Override
+    public Set<EmployeeResponse> mapEmployee(Set<Employee> employees) {
+        if ( employees == null ) {
+            return null;
+        }
+
+        Set<EmployeeResponse> set = new HashSet<EmployeeResponse>( Math.max( (int) ( employees.size() / .75f ) + 1, 16 ) );
+        for ( Employee employee : employees ) {
+            set.add( employeeToEmployeeResponse( employee ) );
+        }
+
+        return set;
+    }
+
+    @Override
+    public Set<Employee> mapEmployeeRequest(Set<EmployeeRequest> employees) {
+        if ( employees == null ) {
+            return null;
+        }
+
+        Set<Employee> set = new HashSet<Employee>( Math.max( (int) ( employees.size() / .75f ) + 1, 16 ) );
+        for ( EmployeeRequest employeeRequest : employees ) {
+            set.add( employeeRequestToEmployee( employeeRequest ) );
+        }
+
+        return set;
+    }
+
+    @Override
+    public List<EmployeeResSimplified> mapEmployeeSimplified(List<Employee> employees) {
+        if ( employees == null ) {
+            return null;
+        }
+
+        List<EmployeeResSimplified> list = new ArrayList<EmployeeResSimplified>( employees.size() );
+        for ( Employee employee : employees ) {
+            list.add( employeeToEmployeeResSimplified( employee ) );
+        }
+
+        return list;
+    }
+
+    @Override
+    public Set<EmployeeResSimplified> mapEmployeeSimplified(Set<Employee> employees) {
+        if ( employees == null ) {
+            return null;
+        }
+
+        Set<EmployeeResSimplified> set = new HashSet<EmployeeResSimplified>( Math.max( (int) ( employees.size() / .75f ) + 1, 16 ) );
+        for ( Employee employee : employees ) {
+            set.add( employeeToEmployeeResSimplified( employee ) );
+        }
+
+        return set;
+    }
+
+    protected TeamResSimplified teamToTeamResSimplified(Team team) {
+        if ( team == null ) {
+            return null;
+        }
+
+        TeamResSimplifiedBuilder teamResSimplified = TeamResSimplified.builder();
+
+        teamResSimplified.description( team.getDescription() );
+        teamResSimplified.id( team.getId() );
+        teamResSimplified.name( team.getName() );
+
+        return teamResSimplified.build();
+    }
+
+    protected EmployeeResSimplified employeeToEmployeeResSimplified(Employee employee) {
+        if ( employee == null ) {
+            return null;
+        }
+
+        EmployeeResSimplifiedBuilder employeeResSimplified = EmployeeResSimplified.builder();
+
+        employeeResSimplified.CIN( employee.getCIN() );
+        employeeResSimplified.birthDate( employee.getBirthDate() );
+        employeeResSimplified.email( employee.getEmail() );
+        employeeResSimplified.firstName( employee.getFirstName() );
+        employeeResSimplified.id( employee.getId() );
+        employeeResSimplified.lastName( employee.getLastName() );
+        employeeResSimplified.password( employee.getPassword() );
+        employeeResSimplified.phoneNumber( employee.getPhoneNumber() );
+        employeeResSimplified.username( employee.getUsername() );
+
+        return employeeResSimplified.build();
     }
 }
