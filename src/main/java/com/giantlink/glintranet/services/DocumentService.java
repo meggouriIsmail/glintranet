@@ -12,6 +12,6 @@ public interface DocumentService
 {
 	void upload(MultipartFile file, Long empId, Long typeId) throws Exception;
 	
-	Optional<Document> download(Long id);
+	Document download(Long id) throws Exception;
 	
 }

@@ -58,11 +58,13 @@ public class DocumentServiceImpl implements DocumentService
 	}
 
 	@Override
-	public Optional<Document> download(Long id) {
-		// TODO Auto-generated method stub
-		return documentRepository.findById(id);
+	public Document download(Long id) throws Exception {
+		
+		return documentRepository.findById(id).orElseThrow(
+				() -> new Exception("File not found with Id "+ id));
 	}
 
+	
 	
 
 }

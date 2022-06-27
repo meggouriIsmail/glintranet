@@ -6,6 +6,8 @@ import java.net.http.HttpHeaders;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,15 +39,17 @@ public class DocumentController
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<byte[]> downloadDoc(@PathVariable Long id)
+	public ResponseEntity<Resource> downloadDoc(@PathVariable Long id) throws Exception
 	{
-		System.out.print("Entered");
-		Optional<Document> foundDocument = documentService.download(id);
-		Document document = foundDocument.get();
+		Document document = null ;
+		document = documentService.download(id);
 		
 		return ResponseEntity.ok()
-							 .header(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION,  "attachment; filename=\"" + document.getDocumentName() + "\"")
-							 .contentType(MediaType.valueOf(document.getContentType()))
-							 .body(document.getData());
+							 .contentType(MediaType.parseMediaType(document.getContentType()))
+							 .header(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\"" + document.getDocumentName()
+				                + "\"")
+							 .body(new ByteArrayResource(document.getData()));
+		
+		
 	}
 }
