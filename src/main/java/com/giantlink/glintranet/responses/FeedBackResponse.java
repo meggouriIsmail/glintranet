@@ -17,9 +17,9 @@ public class FeedBackResponse
 	
 	private Date timestamp;
 	
-	//private Employee employee;
+	private EmployeeResSimplified employee;
 	
-	//private Project project;
+	private ProjectResponse project;
 	
-	//private FeedBackType type;
+	private FeedBackTypeResponse type;
 }
