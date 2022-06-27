@@ -39,4 +39,14 @@ public class FeedBack
 	@JoinColumn(name = "type_id", nullable = false)
 	@JsonBackReference
 	private FeedBackType type;
+	
+	@ManyToOne()
+	@JoinColumn(name = "project_id", nullable = false)
+	@JsonBackReference
+	private Project project;
+	
+	@ManyToOne()
+	@JoinColumn(name = "employee_id", nullable = false) 
+	@JsonBackReference
+	private Employee employee;
 }
