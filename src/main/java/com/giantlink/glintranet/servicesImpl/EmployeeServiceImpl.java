@@ -30,6 +30,9 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@Autowired
 	EmployeeMapper mapper;
 	
+	@Autowired
+	BCryptPasswordEncoder bCryptPasswordEncoder;
+	
 	
 	
 	
@@ -45,10 +48,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 										.lastName(employeeRequest.getLastName())
 										.CIN(employeeRequest.getCIN())
 										.username(employeeRequest.getUsername())
-										.email(employeeRequest.getPassword())
-										.password(employeeRequest.getPassword())
+										.email(employeeRequest.getEmail())
+										.password(bCryptPasswordEncoder.encode(employeeRequest.getPassword()))
 										.phoneNumber(employeeRequest.getPhoneNumber())
 										.birthDate(employeeRequest.getBirthDate())
+										.role(employeeRequest.getRole())
 										.build();
 		employeeRepository.save(newEmployee);
 		return mapper.employeeToEmployeeResponse(newEmployee);

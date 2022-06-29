@@ -25,4 +25,6 @@ public class EmployeeResSimplified {
 	private String phoneNumber;
 
 	private String birthDate;
+	
+	private String role;
 }

@@ -32,13 +32,15 @@ public class EmployeeRequest
 	@Column(length = 25, nullable = false)
 	private String email;
 	
-	@Size(min = 8, max = 20)
+	@Size(min = 8, max = 200)
 	@Column(nullable = false)
 	private String password;
 	
 	@Size(min = 10, max = 12)
 	@Column(nullable = false)
 	private String phoneNumber;
+	
+	private String role;
 	
 
 	private String birthDate;

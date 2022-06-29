@@ -66,6 +66,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
                 .setSubject(userName)
                 .claim("First Name", employeeResponse.getFirstName())
                 .claim("Last Name", employeeResponse.getLastName())
+                .claim("Role ", employeeResponse.getRole())
                 .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET )
                 .compact();

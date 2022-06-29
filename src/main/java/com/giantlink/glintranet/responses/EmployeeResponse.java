@@ -34,6 +34,8 @@ public class EmployeeResponse
 	
 	private String birthDate;
 	
+	private String role;
+	
 	private Set<FAQ> FAQs;
 
 	private TeamResSimplified team;
