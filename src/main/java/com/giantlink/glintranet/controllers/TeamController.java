@@ -26,7 +26,6 @@ import com.giantlink.glintranet.services.TeamService;
 
 @RestController
 @RequestMapping("/api/team")
-@CrossOrigin(origins = { "http://localhost:4200" })
 public class TeamController {
 	
 	@Autowired

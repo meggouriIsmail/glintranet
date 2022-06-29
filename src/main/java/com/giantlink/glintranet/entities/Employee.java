@@ -18,6 +18,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,7 +37,7 @@ public class Employee {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-
+  
 	@Size(min = 3, max = 15)
 	@Column(nullable = false)
 	private String firstName;
@@ -67,9 +68,17 @@ public class Employee {
 	@CreationTimestamp
 	private Date birthDate;
 
-	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	@JsonBackReference
 	private Set<FAQ> FAQs;
+	
+	@OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+	@JsonBackReference
+	private Set<Document> documents;
+	
+	@OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+	@JsonBackReference
+	private Set<FeedBack> feedBacks;
 	
 	@ManyToOne()
     private Team team;
