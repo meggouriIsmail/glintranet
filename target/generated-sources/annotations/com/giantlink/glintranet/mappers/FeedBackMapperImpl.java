@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-06-29T16:22:35+0100",
+    date = "2022-06-29T16:31:25+0100",
     comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.50.v20210914-1429, environment: Java 17.0.1 (Eclipse Adoptium)"
 )
 @Component
@@ -86,6 +86,7 @@ public class FeedBackMapperImpl implements FeedBackMapper {
         employeeResSimplified.lastName( employee.getLastName() );
         employeeResSimplified.password( employee.getPassword() );
         employeeResSimplified.phoneNumber( employee.getPhoneNumber() );
+        employeeResSimplified.role( employee.getRole() );
         employeeResSimplified.username( employee.getUsername() );
 
         return employeeResSimplified.build();

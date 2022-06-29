@@ -57,18 +57,20 @@ public class Employee {
 	@Column(length = 25, nullable = false)
 	private String email;
 
-	@Size(min = 8, max = 20)
+	@Size(min = 8, max = 200)
 	@Column(nullable = false)
 	private String password;
 
 	@Size(min = 10, max = 12)
 	@Column(nullable = false)
 	private String phoneNumber;
+	
+	private String role;
 
-	@CreationTimestamp
-	private Date birthDate;
+	//@CreationTimestamp
+	private String birthDate;
 
-	@OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	@JsonBackReference
 	private Set<FAQ> FAQs;
 	
