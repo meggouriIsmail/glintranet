@@ -24,5 +24,5 @@ public class EmployeeResSimplified {
 
 	private String phoneNumber;
 
-	private Date birthDate;
+	private String birthDate;
 }

@@ -65,8 +65,8 @@ public class Employee {
 	@Column(nullable = false)
 	private String phoneNumber;
 
-	@CreationTimestamp
-	private Date birthDate;
+	//@CreationTimestamp
+	private String birthDate;
 
 	@OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	@JsonBackReference

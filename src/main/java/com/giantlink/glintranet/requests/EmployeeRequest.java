@@ -41,7 +41,7 @@ public class EmployeeRequest
 	private String phoneNumber;
 	
 
-	private Date birthDate;
+	private String birthDate;
 	
 
 }

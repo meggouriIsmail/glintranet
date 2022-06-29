@@ -32,7 +32,7 @@ public class EmployeeResponse
 	
 	private String phoneNumber;
 	
-	private Date birthDate;
+	private String birthDate;
 	
 	private Set<FAQ> FAQs;
 
