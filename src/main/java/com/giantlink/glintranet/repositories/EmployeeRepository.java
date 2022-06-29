@@ -13,5 +13,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>
 	Optional<Employee> findByCIN(String cin);
 	Optional<Employee> findByFirstName(String firstName);
 	Optional<Employee> findByLastName(String lastName);
+	Optional<Employee> findByEmail(String email);
 	
 }

@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.Set;
 
 import com.giantlink.glintranet.entities.FAQ;
-import com.giantlink.glintranet.entities.Team;
 
 import lombok.Builder;
 import lombok.Data;
@@ -32,7 +31,9 @@ public class EmployeeResponse
 	
 	private String phoneNumber;
 	
-	private Date birthDate;
+	private String birthDate;
+	
+	private String role;
 	
 	private Set<FAQ> FAQs;
 
