@@ -68,13 +68,17 @@ public class Employee {
 	@CreationTimestamp
 	private Date birthDate;
 
-	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	@JsonBackReference
 	private Set<FAQ> FAQs;
 	
-	@OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonIgnore
+	@OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+	@JsonBackReference
 	private Set<Document> documents;
+	
+	@OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+	@JsonBackReference
+	private Set<FeedBack> feedBacks;
 	
 	@ManyToOne()
     private Team team;
