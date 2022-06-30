@@ -1,6 +1,5 @@
 package com.giantlink.glintranet.entities;
 
-import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,10 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.CreationTimestamp;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -57,18 +53,20 @@ public class Employee {
 	@Column(length = 25, nullable = false)
 	private String email;
 
-	@Size(min = 8, max = 20)
+	@Size(min = 8, max = 200)
 	@Column(nullable = false)
 	private String password;
 
 	@Size(min = 10, max = 12)
 	@Column(nullable = false)
 	private String phoneNumber;
+	
+	private String role;
 
-	@CreationTimestamp
-	private Date birthDate;
+	//@CreationTimestamp
+	private String birthDate;
 
-	@OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	@JsonBackReference
 	private Set<FAQ> FAQs;
 	
@@ -82,5 +80,9 @@ public class Employee {
 	
 	@ManyToOne()
     private Team team;
+
+	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@JsonBackReference
+	private Set<Comment> comments;
 
 }

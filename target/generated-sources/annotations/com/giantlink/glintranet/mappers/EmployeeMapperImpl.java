@@ -5,6 +5,8 @@ import com.giantlink.glintranet.entities.Employee.EmployeeBuilder;
 import com.giantlink.glintranet.entities.FAQ;
 import com.giantlink.glintranet.entities.Team;
 import com.giantlink.glintranet.requests.EmployeeRequest;
+import com.giantlink.glintranet.responses.EmployeeCommentRes;
+import com.giantlink.glintranet.responses.EmployeeCommentRes.EmployeeCommentResBuilder;
 import com.giantlink.glintranet.responses.EmployeeResSimplified;
 import com.giantlink.glintranet.responses.EmployeeResSimplified.EmployeeResSimplifiedBuilder;
 import com.giantlink.glintranet.responses.EmployeeResponse;
@@ -20,7 +22,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-06-29T09:30:36+0100",
+    date = "2022-06-30T14:07:52+0100",
     comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.50.v20210914-1429, environment: Java 17.0.1 (Eclipse Adoptium)"
 )
 @Component
@@ -41,6 +43,7 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         employee.lastName( employeeRequest.getLastName() );
         employee.password( employeeRequest.getPassword() );
         employee.phoneNumber( employeeRequest.getPhoneNumber() );
+        employee.role( employeeRequest.getRole() );
         employee.username( employeeRequest.getUsername() );
 
         return employee.build();
@@ -66,10 +69,25 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         employeeResponse.lastName( employee.getLastName() );
         employeeResponse.password( employee.getPassword() );
         employeeResponse.phoneNumber( employee.getPhoneNumber() );
+        employeeResponse.role( employee.getRole() );
         employeeResponse.team( teamToTeamResSimplified( employee.getTeam() ) );
         employeeResponse.username( employee.getUsername() );
 
         return employeeResponse.build();
+    }
+
+    @Override
+    public EmployeeCommentRes employeeToEmployeeComment(Employee employee) {
+        if ( employee == null ) {
+            return null;
+        }
+
+        EmployeeCommentResBuilder employeeCommentRes = EmployeeCommentRes.builder();
+
+        employeeCommentRes.firstName( employee.getFirstName() );
+        employeeCommentRes.lastName( employee.getLastName() );
+
+        return employeeCommentRes.build();
     }
 
     @Override
@@ -171,6 +189,7 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         employeeResSimplified.lastName( employee.getLastName() );
         employeeResSimplified.password( employee.getPassword() );
         employeeResSimplified.phoneNumber( employee.getPhoneNumber() );
+        employeeResSimplified.role( employee.getRole() );
         employeeResSimplified.username( employee.getUsername() );
 
         return employeeResSimplified.build();

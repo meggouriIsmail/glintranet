@@ -32,7 +32,7 @@ public class EmployeeRequest
 	@Column(length = 25, nullable = false)
 	private String email;
 	
-	@Size(min = 8, max = 20)
+	@Size(min = 8, max = 200)
 	@Column(nullable = false)
 	private String password;
 	
@@ -40,8 +40,10 @@ public class EmployeeRequest
 	@Column(nullable = false)
 	private String phoneNumber;
 	
+	private String role;
+	
 
-	private Date birthDate;
+	private String birthDate;
 	
 
 }

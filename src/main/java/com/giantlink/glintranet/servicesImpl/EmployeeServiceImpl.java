@@ -8,6 +8,10 @@ import java.util.Optional;
 import javax.persistence.NonUniqueResultException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.giantlink.glintranet.entities.Employee;
@@ -26,6 +30,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@Autowired
 	EmployeeMapper mapper;
 	
+	@Autowired
+	BCryptPasswordEncoder bCryptPasswordEncoder;
+	
+	
+	
 	
 	@Override
 	public EmployeeResponse add(EmployeeRequest employeeRequest) {
@@ -39,10 +48,11 @@ public class EmployeeServiceImpl implements EmployeeService{
 										.lastName(employeeRequest.getLastName())
 										.CIN(employeeRequest.getCIN())
 										.username(employeeRequest.getUsername())
-										.email(employeeRequest.getPassword())
-										.password(employeeRequest.getPassword())
+										.email(employeeRequest.getEmail())
+										.password(bCryptPasswordEncoder.encode(employeeRequest.getPassword()))
 										.phoneNumber(employeeRequest.getPhoneNumber())
 										.birthDate(employeeRequest.getBirthDate())
+										.role(employeeRequest.getRole())
 										.build();
 		employeeRepository.save(newEmployee);
 		return mapper.employeeToEmployeeResponse(newEmployee);
@@ -84,5 +94,24 @@ public class EmployeeServiceImpl implements EmployeeService{
 		
 		return mapper.employeeToEmployeeResponse(emp);
 	}
+
+	@Override
+	public EmployeeResponse get(String email) {
+		return	mapper.employeeToEmployeeResponse(employeeRepository.findByEmail(email).get());
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		Optional<Employee> emp = employeeRepository.findByEmail(email);
+		if(emp.isEmpty()) throw new NoSuchElementException("employee doesn't exisit");
+		return new User(emp.get().getEmail(), emp.get().getPassword(), new ArrayList<>());
+	}
+
+	@Override
+	public void purge() {
+		employeeRepository.deleteAll();
+		
+	}
+
 
 }

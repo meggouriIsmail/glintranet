@@ -39,4 +39,9 @@ public class Comment
 	@JoinColumn(name = "faq_id")
 	@JsonBackReference
 	private FAQ faq;
+
+	@ManyToOne
+	@JoinColumn(name = "emp_id")
+	@JsonBackReference
+	private Employee employee;
 }
