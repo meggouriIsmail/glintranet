@@ -5,6 +5,8 @@ import com.giantlink.glintranet.entities.Employee.EmployeeBuilder;
 import com.giantlink.glintranet.entities.FAQ;
 import com.giantlink.glintranet.entities.Team;
 import com.giantlink.glintranet.requests.EmployeeRequest;
+import com.giantlink.glintranet.responses.EmployeeCommentRes;
+import com.giantlink.glintranet.responses.EmployeeCommentRes.EmployeeCommentResBuilder;
 import com.giantlink.glintranet.responses.EmployeeResSimplified;
 import com.giantlink.glintranet.responses.EmployeeResSimplified.EmployeeResSimplifiedBuilder;
 import com.giantlink.glintranet.responses.EmployeeResponse;
@@ -20,7 +22,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-06-29T16:31:25+0100",
+    date = "2022-06-30T13:47:53+0100",
     comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.50.v20210914-1429, environment: Java 17.0.1 (Eclipse Adoptium)"
 )
 @Component
@@ -72,6 +74,20 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         employeeResponse.username( employee.getUsername() );
 
         return employeeResponse.build();
+    }
+
+    @Override
+    public EmployeeCommentRes employeeToEmployeeComment(Employee employee) {
+        if ( employee == null ) {
+            return null;
+        }
+
+        EmployeeCommentResBuilder employeeCommentRes = EmployeeCommentRes.builder();
+
+        employeeCommentRes.firstName( employee.getFirstName() );
+        employeeCommentRes.lastName( employee.getLastName() );
+
+        return employeeCommentRes.build();
     }
 
     @Override

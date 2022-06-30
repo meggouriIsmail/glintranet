@@ -2,7 +2,6 @@ package com.giantlink.glintranet.responses;
 
 
 
-import java.util.Date;
 import java.util.Set;
 
 import com.giantlink.glintranet.entities.FAQ;
