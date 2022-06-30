@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.giantlink.glintranet.entities.Employee;
@@ -77,11 +78,11 @@ public class FAQServiceImpl implements FAQService {
 
 	@Override
 	public List<FAQResponse> getAll() {
-		List<CommentResponse> commentResponses = new ArrayList<CommentResponse>();
 		
 		
 		List<FAQResponse> allFAQs = new ArrayList<FAQResponse>();
-		faqRepository.findAll().forEach(faq -> {
+		faqRepository.findAll(Sort.by(Sort.Direction.DESC, "postingDate")).forEach(faq -> {
+			List<CommentResponse> commentResponses = new ArrayList<CommentResponse>();
 			
 			faq.getComments().forEach(comment -> {
 				CommentResponse response = CommentResponse.builder()
@@ -93,6 +94,33 @@ public class FAQServiceImpl implements FAQService {
 						
 						commentResponses.add(response);
 					});
+			FAQResponse faqResponse = faqMapper.entityToResponse(faq);
+			faqResponse.setComments(commentResponses);
+			
+			allFAQs.add(faqResponse);
+			
+		});
+		return allFAQs;
+	}
+	
+	@Override
+	public List<FAQResponse> getAllBySection(Long sectionId) {
+		
+		
+		List<FAQResponse> allFAQs = new ArrayList<FAQResponse>();
+		faqRepository.findAllBySection(sectionId).forEach(faq -> {
+			List<CommentResponse> commentResponses = new ArrayList<CommentResponse>();
+			
+			faq.getComments().forEach(comment -> {
+				CommentResponse response = CommentResponse.builder()
+						.id(comment.getId())
+						.commentDate(comment.getCommentDate())
+						.content(comment.getContent())
+						.employeeCommentResponse(EmployeeMapper.INSTANCE.employeeToEmployeeComment(comment.getEmployee()))
+						.build();
+				
+				commentResponses.add(response);
+			});
 			FAQResponse faqResponse = faqMapper.entityToResponse(faq);
 			faqResponse.setComments(commentResponses);
 			

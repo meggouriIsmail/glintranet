@@ -42,7 +42,13 @@ public class FAQController
 		List<FAQResponse> response = faqService.getAll();
 		return new ResponseEntity<List<FAQResponse>>(response, HttpStatus.OK);
 	}
-	
+
+	@GetMapping("section/{sectionId}")
+	public ResponseEntity<List<FAQResponse>> getAll(@PathVariable Long sectionId)
+	{
+		List<FAQResponse> response = faqService.getAllBySection(sectionId);
+		return new ResponseEntity<List<FAQResponse>>(response, HttpStatus.OK);
+	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<FAQResponse> getFAQ(@PathVariable Long id)
