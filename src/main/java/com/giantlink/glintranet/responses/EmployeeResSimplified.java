@@ -1,7 +1,5 @@
 package com.giantlink.glintranet.responses;
 
-import java.util.Date;
-
 import lombok.Builder;
 import lombok.Data;
 

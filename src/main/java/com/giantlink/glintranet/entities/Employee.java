@@ -1,6 +1,5 @@
 package com.giantlink.glintranet.entities;
 
-import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,10 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
-import org.hibernate.annotations.CreationTimestamp;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -84,5 +80,9 @@ public class Employee {
 	
 	@ManyToOne()
     private Team team;
+
+	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@JsonBackReference
+	private Set<Comment> comments;
 
 }

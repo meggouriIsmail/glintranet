@@ -23,7 +23,7 @@ import com.giantlink.glintranet.services.ProjectService;
 
 @RestController
 @RequestMapping("/api/project")
-
+@CrossOrigin(origins = { "http://localhost:4200" })
 public class ProjectController {
 	@Autowired
 	private ProjectService projectService;

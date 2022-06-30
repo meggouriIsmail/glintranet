@@ -17,4 +17,6 @@ public class CommentRequest {
 	private Date commentDate;
 	
 	private Long faq_Id;
+	
+	private Long emp_Id;
 }
