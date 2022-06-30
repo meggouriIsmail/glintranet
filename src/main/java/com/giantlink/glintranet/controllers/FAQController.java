@@ -59,14 +59,14 @@ public class FAQController
 	}
 	
 	
-	@PutMapping("/up/{id}")
+	@GetMapping("/up/{id}")
 	public ResponseEntity<FAQResponse> voteUp(@PathVariable Long id)
 	{
 		FAQResponse response = faqService.voteUp(id);
 		return new ResponseEntity<FAQResponse>(response,HttpStatus.OK);
 	}
 	
-	@PutMapping("/down/{id}")
+	@GetMapping("/down/{id}")
 	public ResponseEntity<?> voteDown(@PathVariable Long id)
 	{
 		return new ResponseEntity<>(faqService.voteDown(id), HttpStatus.OK);
