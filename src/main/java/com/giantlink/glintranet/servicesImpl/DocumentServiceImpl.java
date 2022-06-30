@@ -1,8 +1,10 @@
 package com.giantlink.glintranet.servicesImpl;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import org.aspectj.lang.reflect.NoSuchAdviceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -33,8 +35,18 @@ public class DocumentServiceImpl implements DocumentService
 	public void upload(MultipartFile file, Long empId, Long typeId) throws Exception 
 	{
 		Document document = new Document();		
-		Employee employee = employeeRepository.getById(empId);
-		DocType type  = typeRepository.getById(typeId);
+		Optional<Employee> employee = employeeRepository.findById(empId);
+		Optional<DocType> type  = typeRepository.findById(typeId);
+		
+		/*
+		 * if(!employee.isEmpty()) { throw new
+		 * NoSuchElementException(Employee.class.getSimpleName()+" doesnt exist"); }
+		 * 
+		 * if(!type.isPresent()) { throw new
+		 * NoSuchElementException(DocType.class.getSimpleName()+" doesnt exist"); }
+		 */
+		
+		
 		 try 
 		 {
 	            
@@ -42,15 +54,15 @@ public class DocumentServiceImpl implements DocumentService
 				document.setContentType(file.getContentType());
 				document.setData(file.getBytes());
 				document.setSize(file.getSize());
-				document.setType(type);
-				document.setEmployee(employee);
+				document.setType(type.get());
+				document.setEmployee(employee.get());
 				
 				documentRepository.save(document);
 				
 				System.out.println(document.getDocumentName()+" "+document.getContentType()+" "+document.getCreationDate()+" "+
 									document.getData()+" "+document.getSize()+" "+document.getEmployee().getId());
 	       } catch (Exception e) {
-	            throw new Exception("Could not save File: " + document.getDocumentName());
+	            throw new Exception("Could not save File: " + document.getDocumentName()+"   ---- "+e.getMessage());
 	       }
 		System.out.println("document "+document.getDocumentName()+" uploaded succesfully");
 		

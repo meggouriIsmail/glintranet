@@ -197,8 +197,11 @@ public class FAQServiceImpl implements FAQService {
 	public FAQResponse voteDown(Long id) {
 		FAQ faq = faqRepository.getById(id);
 		int vote = faq.getVotes();
-		vote--;
+		int voteDown = faq.getVotesDown();
+		vote++;
+		voteDown++;
 		faq.setVotes(vote);
+		faq.setVotesDown(voteDown);
 		faqRepository.save(faq);
 
 		return faqMapper.entityToResponse(faq);
@@ -208,8 +211,11 @@ public class FAQServiceImpl implements FAQService {
 	public FAQResponse voteUp(Long id) {
 		FAQ faq = faqRepository.findById(id).get();
 		int vote = faq.getVotes();
+		int voteUp = faq.getVotesUp();
 		vote++;
+		voteUp++;
 		faq.setVotes(vote);
+		faq.setVotesUp(voteUp);
 		faqRepository.save(faq);
 
 		return faqMapper.entityToResponse(faq);

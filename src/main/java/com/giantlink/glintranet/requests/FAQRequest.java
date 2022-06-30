@@ -32,6 +32,10 @@ public class FAQRequest
 	private Date postingDate;
 	
 	private int votes;
+	
+	private int votesUp;
+	
+	private int votesDown;
 
 	@Column(nullable = false)
 	private Boolean status;

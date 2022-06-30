@@ -24,7 +24,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-06-30T13:47:52+0100",
+    date = "2022-06-30T14:14:15+0100",
     comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.50.v20210914-1429, environment: Java 17.0.1 (Eclipse Adoptium)"
 )
 @Component
@@ -43,6 +43,8 @@ public class FAQMapperImpl implements FAQMapper {
         fAQ.postingDate( faqRequest.getPostingDate() );
         fAQ.status( faqRequest.getStatus() );
         fAQ.votes( faqRequest.getVotes() );
+        fAQ.votesDown( faqRequest.getVotesDown() );
+        fAQ.votesUp( faqRequest.getVotesUp() );
 
         return fAQ.build();
     }
@@ -68,6 +70,8 @@ public class FAQMapperImpl implements FAQMapper {
             fAQResponse.tags( new HashSet<Tag>( set ) );
         }
         fAQResponse.votes( faq.getVotes() );
+        fAQResponse.votesDown( faq.getVotesDown() );
+        fAQResponse.votesUp( faq.getVotesUp() );
 
         return fAQResponse.build();
     }

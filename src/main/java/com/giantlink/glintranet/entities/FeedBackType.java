@@ -29,7 +29,7 @@ public class FeedBackType
 	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
-	@Size(min = 3, max = 15) @Column(nullable = false)
+	@Size(min = 3, max = 50) @Column(nullable = false)
 	private String name;
 	
 	@OneToMany(mappedBy = "type", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)

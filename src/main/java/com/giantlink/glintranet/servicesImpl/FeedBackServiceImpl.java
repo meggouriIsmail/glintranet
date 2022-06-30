@@ -1,6 +1,8 @@
 package com.giantlink.glintranet.servicesImpl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,15 +76,21 @@ public class FeedBackServiceImpl implements FeedBackService
 	}
 
 	@Override
-	public FeedBackResponse get(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public FeedBackResponse get(Long id) 
+	{
+		Optional<FeedBack> foundFeedBack = feedBackRepository.findById(id);
+		if(!foundFeedBack.isPresent()) 
+		{	throw new NoSuchElementException(FeedBack.class.getSimpleName()+" doesnt exist");	}
+		
+		
+		return mapper.entityToResponse(foundFeedBack.get());
 	}
 
 	@Override
 	public List<FeedBackResponse> getAll() {
-		// TODO Auto-generated method stub
-		return null;
+		List<FeedBackResponse> list = new ArrayList<>();
+		feedBackRepository.findAll().forEach(fb -> list.add(mapper.entityToResponse(fb)));
+		return list;
 	}
 
 	@Override
