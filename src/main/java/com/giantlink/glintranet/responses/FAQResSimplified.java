@@ -18,6 +18,10 @@ public class FAQResSimplified {
 	private Date postingDate;
 
 	private int votes;
+	
+	private int votesUp;
+	
+	private int votesDown;
 
 	private Boolean status;
 }
