@@ -98,4 +98,12 @@ public class FeedBackServiceImpl implements FeedBackService
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public List<FeedBackResponse> getAllByProject(Long projectId) {
+		List<FeedBackResponse> list = new ArrayList<>();
+		feedBackRepository.findByProject(projectId).forEach(p -> list.add(mapper.entityToResponse(p)));
+		return list;
+	}
+
 }

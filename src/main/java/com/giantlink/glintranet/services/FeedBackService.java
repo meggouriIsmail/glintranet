@@ -9,6 +9,7 @@ public interface FeedBackService {
 	FeedBackResponse add(FeedBackRequest request);
 	FeedBackResponse get(Long id);
 	List<FeedBackResponse> getAll();
+	List<FeedBackResponse> getAllByProject(Long projectId);
 	
 	void delete(Long id);
 	

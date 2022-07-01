@@ -10,6 +10,8 @@ public interface FAQService {
 
 	List<FAQResponse> getAll();
 
+	List<FAQResponse> getAllBySection(Long sectionId);
+
 	FAQResponse getFaq(Long id);
 
 	FAQResponse editFaq(Long id, FAQRequest faqRequest);

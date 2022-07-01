@@ -45,6 +45,13 @@ public class FeedBackController
 		return new ResponseEntity<FeedBackResponse>(response, HttpStatus.OK);
 	}
 	
+	@GetMapping("/project/{id}")
+	public ResponseEntity<List<FeedBackResponse>> getFeedBacksByProject(@PathVariable Long id)
+	{
+		List<FeedBackResponse> list = feedBackService.getAllByProject(id);
+		return new ResponseEntity<List<FeedBackResponse>>(list,HttpStatus.OK);
+	}
+	
 	@GetMapping()
 	public ResponseEntity<List<FeedBackResponse>> getFeedbacks()
 	{
