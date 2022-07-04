@@ -1,15 +1,13 @@
 {
 	"info": {
-<<<<<<< HEAD
+
 		"_postman_id": "02209dc8-e417-47f6-a366-f383528267e8",
 		"name": "Gl-Intranet",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-=======
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_postman_id": "f783e25a-0743-4b1e-8e84-1730dfc57fc8",
 		"name": "Gl-Intranet",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "20414253"
->>>>>>> 80a984fd91381c3645c91092b04abc27889639a0
 	},
 	"item": [
 		{
@@ -22,11 +20,10 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-<<<<<<< HEAD
+
 							"raw": "{\r\n    \"firstName\": \"Bakr\",\r\n    \"lastName\": \"MHAMDI\",\r\n    \"CIN\": \"K15983\",\r\n    \"username\": \"mhamdib\",\r\n    \"email\": \"mhamdib@gmail.com\",\r\n    \"password\": \"awerty123\",\r\n    \"phoneNumber\": \"0666554475\"\r\n}",
-=======
-							"raw": "{\r\n    \"firstName\": \"mile\",\r\n    \"lastName\": \"meggo\",\r\n    \"CIN\": \"U785496\",\r\n    \"username\": \"meggo\",\r\n    \"email\": \"elMeggo@gmail.com\",\r\n    \"password\": \"123456789\",\r\n    \"phoneNumber\": \"0685741254\"\r\n}",
->>>>>>> 80a984fd91381c3645c91092b04abc27889639a0
+					"raw": "{\r\n    \"firstName\": \"mile\",\r\n    \"lastName\": \"meggo\",\r\n    \"CIN\": \"U785496\",\r\n    \"username\": \"meggo\",\r\n    \"email\": \"elMeggo@gmail.com\",\r\n    \"password\": \"123456789\",\r\n    \"phoneNumber\": \"0685741254\"\r\n}",
+
 							"options": {
 								"raw": {
 									"language": "json"
@@ -155,8 +152,6 @@
 						}
 					},
 					"response": []
-<<<<<<< HEAD
-=======
 				},
 				{
 					"name": "Login",
@@ -189,7 +184,6 @@
 						}
 					},
 					"response": []
->>>>>>> 80a984fd91381c3645c91092b04abc27889639a0
 				}
 			]
 		},
@@ -759,8 +753,6 @@
 			"name": "Project",
 			"item": [
 				{
-<<<<<<< HEAD
-=======
 					"name": "GET ALL",
 					"request": {
 						"method": "GET",
@@ -791,7 +783,6 @@
 					"response": []
 				},
 				{
->>>>>>> 80a984fd91381c3645c91092b04abc27889639a0
 					"name": "ADD",
 					"request": {
 						"method": "POST",
@@ -822,8 +813,7 @@
 					"response": []
 				},
 				{
-<<<<<<< HEAD
-=======
+
 					"name": "DELETE",
 					"request": {
 						"method": "DELETE",
@@ -845,7 +835,6 @@
 					"response": []
 				},
 				{
->>>>>>> 80a984fd91381c3645c91092b04abc27889639a0
 					"name": "GET ONE",
 					"request": {
 						"method": "GET",
@@ -867,7 +856,6 @@
 					"response": []
 				},
 				{
-<<<<<<< HEAD
 					"name": "GET ALL",
 					"request": {
 						"method": "GET",
@@ -898,8 +886,7 @@
 					"response": []
 				},
 				{
-=======
->>>>>>> 80a984fd91381c3645c91092b04abc27889639a0
+
 					"name": "UPDATE",
 					"request": {
 						"method": "PUT",
@@ -928,7 +915,6 @@
 						}
 					},
 					"response": []
-<<<<<<< HEAD
 				},
 				{
 					"name": "DELETE",
@@ -1166,8 +1152,7 @@
 						}
 					},
 					"response": []
-=======
->>>>>>> 80a984fd91381c3645c91092b04abc27889639a0
+
 				}
 			]
 		}
