@@ -1,6 +1,7 @@
 package com.giantlink.glintranet.servicesImpl;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -75,6 +76,22 @@ public class DocumentServiceImpl implements DocumentService
 		return documentRepository.findById(id).orElseThrow(
 				() -> new Exception("File not found with Id "+ id));
 	}
+
+	@Override
+	public List<Document> getDocs() 
+	{
+		List<Document> documents = documentRepository.findAll();
+		
+		return documents;
+	}
+
+	@Override
+	public Document getDoc(Long id) {
+		Document document = documentRepository.findById(id).get();
+		return document;
+	}
+	
+	
 
 	
 	
