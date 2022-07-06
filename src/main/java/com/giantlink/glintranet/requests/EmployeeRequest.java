@@ -1,7 +1,7 @@
 package com.giantlink.glintranet.requests;
 
 
-import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.validation.constraints.Size;
@@ -40,7 +40,7 @@ public class EmployeeRequest
 	@Column(nullable = false)
 	private String phoneNumber;
 	
-	private String role;
+	private List<RoleReq> roles;
 	
 
 	private String birthDate;

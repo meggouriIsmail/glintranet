@@ -4,6 +4,7 @@ import com.giantlink.glintranet.entities.Comment;
 import com.giantlink.glintranet.entities.Employee;
 import com.giantlink.glintranet.entities.FAQ;
 import com.giantlink.glintranet.entities.FAQ.FAQBuilder;
+import com.giantlink.glintranet.entities.Role;
 import com.giantlink.glintranet.entities.Section;
 import com.giantlink.glintranet.entities.Tag;
 import com.giantlink.glintranet.requests.FAQRequest;
@@ -13,6 +14,8 @@ import com.giantlink.glintranet.responses.EmployeeResSimplified;
 import com.giantlink.glintranet.responses.EmployeeResSimplified.EmployeeResSimplifiedBuilder;
 import com.giantlink.glintranet.responses.FAQResponse;
 import com.giantlink.glintranet.responses.FAQResponse.FAQResponseBuilder;
+import com.giantlink.glintranet.responses.RoleRes;
+import com.giantlink.glintranet.responses.RoleRes.RoleResBuilder;
 import com.giantlink.glintranet.responses.SectionResponse;
 import com.giantlink.glintranet.responses.SectionResponse.SectionResponseBuilder;
 import java.util.ArrayList;
@@ -24,8 +27,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-07-03T13:24:24+0100",
-    comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.0.v20210708-0430, environment: Java 17 (Eclipse Adoptium)"
+    date = "2022-07-06T15:19:41+0100",
+    comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.50.v20210914-1429, environment: Java 17.0.1 (Eclipse Adoptium)"
 )
 @Component
 public class FAQMapperImpl implements FAQMapper {
@@ -117,6 +120,33 @@ public class FAQMapperImpl implements FAQMapper {
         return list;
     }
 
+    protected RoleRes roleToRoleRes(Role role) {
+        if ( role == null ) {
+            return null;
+        }
+
+        RoleResBuilder roleRes = RoleRes.builder();
+
+        roleRes.description( role.getDescription() );
+        roleRes.id( role.getId() );
+        roleRes.name( role.getName() );
+
+        return roleRes.build();
+    }
+
+    protected Set<RoleRes> roleSetToRoleResSet(Set<Role> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<RoleRes> set1 = new HashSet<RoleRes>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( Role role : set ) {
+            set1.add( roleToRoleRes( role ) );
+        }
+
+        return set1;
+    }
+
     protected EmployeeResSimplified employeeToEmployeeResSimplified(Employee employee) {
         if ( employee == null ) {
             return null;
@@ -130,9 +160,8 @@ public class FAQMapperImpl implements FAQMapper {
         employeeResSimplified.firstName( employee.getFirstName() );
         employeeResSimplified.id( employee.getId() );
         employeeResSimplified.lastName( employee.getLastName() );
-        employeeResSimplified.password( employee.getPassword() );
         employeeResSimplified.phoneNumber( employee.getPhoneNumber() );
-        employeeResSimplified.role( employee.getRole() );
+        employeeResSimplified.roles( roleSetToRoleResSet( employee.getRoles() ) );
         employeeResSimplified.username( employee.getUsername() );
 
         return employeeResSimplified.build();

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.giantlink.glintranet.requests.EmployeeRequest;
+import com.giantlink.glintranet.responses.EmployeeResSimplified;
 import com.giantlink.glintranet.responses.EmployeeResponse;
 import com.giantlink.glintranet.services.EmployeeService;
 
@@ -32,18 +33,18 @@ public class EmployeeController
 	EmployeeService employeeService;
 	
 	@GetMapping
-	public ResponseEntity<List<EmployeeResponse>> getEmployees()
+	public ResponseEntity<List<EmployeeResSimplified>> getEmployees()
 	{
-		List<EmployeeResponse> list = new ArrayList<>();
+		List<EmployeeResSimplified> list = new ArrayList<>();
 		list = employeeService.getAll();
-		return new ResponseEntity<List<EmployeeResponse>>(list, HttpStatus.OK);
+		return new ResponseEntity<List<EmployeeResSimplified>>(list, HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<EmployeeResponse> getEmployee(@PathVariable Long id)
+	public ResponseEntity<EmployeeResSimplified> getEmployee(@PathVariable Long id)
 	{
-		EmployeeResponse emp = employeeService.get(id);
-		return new ResponseEntity<EmployeeResponse>(emp,HttpStatus.OK);
+		EmployeeResSimplified emp = employeeService.get(id);
+		return new ResponseEntity<EmployeeResSimplified>(emp,HttpStatus.OK);
 	}
 	
 	@PostMapping
