@@ -28,8 +28,9 @@ public interface EmployeeMapper {
 	
 	Set<Employee> mapEmployeeRequest(Set<EmployeeRequest> employees);
 	
-
 	List<EmployeeResSimplified> mapEmployeeSimplified(List<Employee> employees);
+
+	EmployeeResSimplified toEmployeeSimplified(Employee employees);
 
 	Set<EmployeeResSimplified> mapEmployeeSimplified(Set<Employee> employees);
 }

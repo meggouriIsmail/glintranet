@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import org.aspectj.lang.reflect.NoSuchAdviceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -17,7 +16,6 @@ import com.giantlink.glintranet.entities.Employee;
 import com.giantlink.glintranet.repositories.DocTypeRepository;
 import com.giantlink.glintranet.repositories.DocumentRepository;
 import com.giantlink.glintranet.repositories.EmployeeRepository;
-import com.giantlink.glintranet.requests.DocumentRequest;
 import com.giantlink.glintranet.services.DocumentService;
 
 @Service
