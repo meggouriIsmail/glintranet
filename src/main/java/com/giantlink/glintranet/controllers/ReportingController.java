@@ -18,7 +18,7 @@ public class ReportingController
 {
 	@Autowired
 	ReportingService reportingService;
-	
+
 	@GetMapping
 	public ResponseEntity<ReportingResponse> getAll()
 	{

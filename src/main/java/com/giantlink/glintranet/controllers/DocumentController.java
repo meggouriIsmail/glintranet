@@ -1,9 +1,12 @@
 package com.giantlink.glintranet.controllers;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -40,12 +43,23 @@ public class DocumentController
 		Document document = null ;
 		document = documentService.download(id);
 		
+		
 		return ResponseEntity.ok()
 							 .contentType(MediaType.parseMediaType(document.getContentType()))
 							 .header(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\"" + document.getDocumentName()
 				                + "\"")
 							 .body(new ByteArrayResource(document.getData()));
-		
-		
+	}
+	
+	@GetMapping()
+	public ResponseEntity<List<Document>> getOne()
+	{
+		return new ResponseEntity<List<Document>>(documentService.getDocs(),HttpStatus.OK);
+	}
+	
+	@GetMapping("/get/{id}")
+	public ResponseEntity<Document> getDoc(@PathVariable Long id)
+	{
+		return new ResponseEntity<Document>(documentService.getDoc(id),HttpStatus.OK);
 	}
 }
