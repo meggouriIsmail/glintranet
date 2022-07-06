@@ -1,9 +1,11 @@
 package com.giantlink.glintranet.servicesImpl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.persistence.NonUniqueResultException;
 
@@ -15,9 +17,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.giantlink.glintranet.entities.Employee;
+import com.giantlink.glintranet.entities.Role;
 import com.giantlink.glintranet.mappers.EmployeeMapper;
 import com.giantlink.glintranet.repositories.EmployeeRepository;
+import com.giantlink.glintranet.repositories.RoleRepository;
 import com.giantlink.glintranet.requests.EmployeeRequest;
+import com.giantlink.glintranet.responses.EmployeeResSimplified;
 import com.giantlink.glintranet.responses.EmployeeResponse;
 import com.giantlink.glintranet.services.EmployeeService;
 
@@ -33,6 +38,9 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@Autowired
 	BCryptPasswordEncoder bCryptPasswordEncoder;
 	
+	@Autowired
+	RoleRepository roleRepository;
+	
 	
 	
 	
@@ -43,8 +51,15 @@ public class EmployeeServiceImpl implements EmployeeService{
 		if(findEmployee.isPresent()) 
 		{	throw new NonUniqueResultException(Employee.class.getSimpleName()+ " already exist"); }
 		
-		Employee newEmployee = null ;
-		newEmployee = Employee.builder().firstName(employeeRequest.getFirstName())
+		Set<Role> roles = new HashSet<Role>();
+		
+		employeeRequest.getRoles().forEach(role -> {
+			Optional<Role> optional = roleRepository.findByName(role.getName());
+			
+			if (optional.isPresent()) roles.add(optional.get());
+		});
+		
+		Employee newEmployee = Employee.builder().firstName(employeeRequest.getFirstName())
 										.lastName(employeeRequest.getLastName())
 										.CIN(employeeRequest.getCIN())
 										.username(employeeRequest.getUsername())
@@ -52,23 +67,23 @@ public class EmployeeServiceImpl implements EmployeeService{
 										.password(bCryptPasswordEncoder.encode(employeeRequest.getPassword()))
 										.phoneNumber(employeeRequest.getPhoneNumber())
 										.birthDate(employeeRequest.getBirthDate())
-										.role(employeeRequest.getRole())
+										.roles(roles)
 										.build();
-		employeeRepository.save(newEmployee);
-		return mapper.employeeToEmployeeResponse(newEmployee);
+		
+		return mapper.employeeToEmployeeResponse(employeeRepository.save(newEmployee));
 		
 	}
 
 	@Override
-	public EmployeeResponse get(Long id) {
+	public EmployeeResSimplified get(Long id) {
 		
-		return	mapper.employeeToEmployeeResponse(employeeRepository.findById(id).get());
+		return	mapper.toEmployeeSimplified(employeeRepository.findById(id).get());
 	}
 
 	@Override
-	public List<EmployeeResponse> getAll() {
-		List<EmployeeResponse> allEmployees = new ArrayList<EmployeeResponse>();
-		employeeRepository.findAll().forEach(emp -> allEmployees.add(mapper.employeeToEmployeeResponse(emp)));
+	public List<EmployeeResSimplified> getAll() {
+		List<EmployeeResSimplified> allEmployees = new ArrayList<EmployeeResSimplified>();
+		employeeRepository.findAll().forEach(emp -> allEmployees.add(mapper.toEmployeeSimplified(emp)));
 		return allEmployees;
 	}
 

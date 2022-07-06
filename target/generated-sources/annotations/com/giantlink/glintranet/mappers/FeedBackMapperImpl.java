@@ -5,6 +5,7 @@ import com.giantlink.glintranet.entities.FeedBack;
 import com.giantlink.glintranet.entities.FeedBack.FeedBackBuilder;
 import com.giantlink.glintranet.entities.FeedBackType;
 import com.giantlink.glintranet.entities.Project;
+import com.giantlink.glintranet.entities.Role;
 import com.giantlink.glintranet.requests.FeedBackRequest;
 import com.giantlink.glintranet.responses.EmployeeResSimplified;
 import com.giantlink.glintranet.responses.EmployeeResSimplified.EmployeeResSimplifiedBuilder;
@@ -13,15 +14,19 @@ import com.giantlink.glintranet.responses.FeedBackTypeResponse;
 import com.giantlink.glintranet.responses.FeedBackTypeResponse.FeedBackTypeResponseBuilder;
 import com.giantlink.glintranet.responses.ProjectResponse;
 import com.giantlink.glintranet.responses.ProjectResponse.ProjectResponseBuilder;
+import com.giantlink.glintranet.responses.RoleRes;
+import com.giantlink.glintranet.responses.RoleRes.RoleResBuilder;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-07-03T13:24:26+0100",
-    comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.0.v20210708-0430, environment: Java 17 (Eclipse Adoptium)"
+    date = "2022-07-06T15:33:10+0100",
+    comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.50.v20210914-1429, environment: Java 17.0.1 (Eclipse Adoptium)"
 )
 @Component
 public class FeedBackMapperImpl implements FeedBackMapper {
@@ -71,6 +76,33 @@ public class FeedBackMapperImpl implements FeedBackMapper {
         return list;
     }
 
+    protected RoleRes roleToRoleRes(Role role) {
+        if ( role == null ) {
+            return null;
+        }
+
+        RoleResBuilder roleRes = RoleRes.builder();
+
+        roleRes.description( role.getDescription() );
+        roleRes.id( role.getId() );
+        roleRes.name( role.getName() );
+
+        return roleRes.build();
+    }
+
+    protected Set<RoleRes> roleSetToRoleResSet(Set<Role> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<RoleRes> set1 = new HashSet<RoleRes>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( Role role : set ) {
+            set1.add( roleToRoleRes( role ) );
+        }
+
+        return set1;
+    }
+
     protected EmployeeResSimplified employeeToEmployeeResSimplified(Employee employee) {
         if ( employee == null ) {
             return null;
@@ -84,9 +116,8 @@ public class FeedBackMapperImpl implements FeedBackMapper {
         employeeResSimplified.firstName( employee.getFirstName() );
         employeeResSimplified.id( employee.getId() );
         employeeResSimplified.lastName( employee.getLastName() );
-        employeeResSimplified.password( employee.getPassword() );
         employeeResSimplified.phoneNumber( employee.getPhoneNumber() );
-        employeeResSimplified.role( employee.getRole() );
+        employeeResSimplified.roles( roleSetToRoleResSet( employee.getRoles() ) );
         employeeResSimplified.username( employee.getUsername() );
 
         return employeeResSimplified.build();
