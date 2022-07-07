@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-07-06T15:19:41+0100",
+    date = "2022-07-07T09:53:25+0100",
     comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.50.v20210914-1429, environment: Java 17.0.1 (Eclipse Adoptium)"
 )
 @Component
@@ -74,6 +74,7 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         employeeResponse.lastName( employee.getLastName() );
         employeeResponse.password( employee.getPassword() );
         employeeResponse.phoneNumber( employee.getPhoneNumber() );
+        employeeResponse.roles( roleSetToRoleResSet( employee.getRoles() ) );
         employeeResponse.team( teamToTeamResSimplified( employee.getTeam() ) );
         employeeResponse.username( employee.getUsername() );
 
@@ -210,20 +211,6 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         return set;
     }
 
-    protected TeamResSimplified teamToTeamResSimplified(Team team) {
-        if ( team == null ) {
-            return null;
-        }
-
-        TeamResSimplifiedBuilder teamResSimplified = TeamResSimplified.builder();
-
-        teamResSimplified.description( team.getDescription() );
-        teamResSimplified.id( team.getId() );
-        teamResSimplified.name( team.getName() );
-
-        return teamResSimplified.build();
-    }
-
     protected RoleRes roleToRoleRes(Role role) {
         if ( role == null ) {
             return null;
@@ -249,5 +236,19 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         }
 
         return set1;
+    }
+
+    protected TeamResSimplified teamToTeamResSimplified(Team team) {
+        if ( team == null ) {
+            return null;
+        }
+
+        TeamResSimplifiedBuilder teamResSimplified = TeamResSimplified.builder();
+
+        teamResSimplified.description( team.getDescription() );
+        teamResSimplified.id( team.getId() );
+        teamResSimplified.name( team.getName() );
+
+        return teamResSimplified.build();
     }
 }
