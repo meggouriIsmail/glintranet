@@ -3,12 +3,19 @@ package com.giantlink.glintranet.mappers;
 import com.giantlink.glintranet.entities.Employee;
 import com.giantlink.glintranet.entities.Employee.EmployeeBuilder;
 import com.giantlink.glintranet.entities.FAQ;
+import com.giantlink.glintranet.entities.Role;
+import com.giantlink.glintranet.entities.Role.RoleBuilder;
 import com.giantlink.glintranet.entities.Team;
 import com.giantlink.glintranet.requests.EmployeeRequest;
+import com.giantlink.glintranet.requests.RoleReq;
+import com.giantlink.glintranet.responses.EmployeeCommentRes;
+import com.giantlink.glintranet.responses.EmployeeCommentRes.EmployeeCommentResBuilder;
 import com.giantlink.glintranet.responses.EmployeeResSimplified;
 import com.giantlink.glintranet.responses.EmployeeResSimplified.EmployeeResSimplifiedBuilder;
 import com.giantlink.glintranet.responses.EmployeeResponse;
 import com.giantlink.glintranet.responses.EmployeeResponse.EmployeeResponseBuilder;
+import com.giantlink.glintranet.responses.RoleRes;
+import com.giantlink.glintranet.responses.RoleRes.RoleResBuilder;
 import com.giantlink.glintranet.responses.TeamResSimplified;
 import com.giantlink.glintranet.responses.TeamResSimplified.TeamResSimplifiedBuilder;
 import java.util.ArrayList;
@@ -20,7 +27,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-07-12T13:17:48+0100",
+    date = "2022-07-13T11:16:24+0100",
     comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.50.v20210914-1429, environment: Java 17.0.2 (Eclipse Adoptium)"
 )
 @Component
@@ -41,6 +48,7 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         employee.lastName( employeeRequest.getLastName() );
         employee.password( employeeRequest.getPassword() );
         employee.phoneNumber( employeeRequest.getPhoneNumber() );
+        employee.roles( roleReqListToRoleSet( employeeRequest.getRoles() ) );
         employee.username( employeeRequest.getUsername() );
 
         return employee.build();
@@ -70,6 +78,20 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         employeeResponse.username( employee.getUsername() );
 
         return employeeResponse.build();
+    }
+
+    @Override
+    public EmployeeCommentRes employeeToEmployeeComment(Employee employee) {
+        if ( employee == null ) {
+            return null;
+        }
+
+        EmployeeCommentResBuilder employeeCommentRes = EmployeeCommentRes.builder();
+
+        employeeCommentRes.firstName( employee.getFirstName() );
+        employeeCommentRes.lastName( employee.getLastName() );
+
+        return employeeCommentRes.build();
     }
 
     @Override
@@ -122,10 +144,31 @@ public class EmployeeMapperImpl implements EmployeeMapper {
 
         List<EmployeeResSimplified> list = new ArrayList<EmployeeResSimplified>( employees.size() );
         for ( Employee employee : employees ) {
-            list.add( employeeToEmployeeResSimplified( employee ) );
+            list.add( toEmployeeSimplified( employee ) );
         }
 
         return list;
+    }
+
+    @Override
+    public EmployeeResSimplified toEmployeeSimplified(Employee employees) {
+        if ( employees == null ) {
+            return null;
+        }
+
+        EmployeeResSimplifiedBuilder employeeResSimplified = EmployeeResSimplified.builder();
+
+        employeeResSimplified.CIN( employees.getCIN() );
+        employeeResSimplified.birthDate( employees.getBirthDate() );
+        employeeResSimplified.email( employees.getEmail() );
+        employeeResSimplified.firstName( employees.getFirstName() );
+        employeeResSimplified.id( employees.getId() );
+        employeeResSimplified.lastName( employees.getLastName() );
+        employeeResSimplified.phoneNumber( employees.getPhoneNumber() );
+        employeeResSimplified.roles( roleSetToRoleResSet( employees.getRoles() ) );
+        employeeResSimplified.username( employees.getUsername() );
+
+        return employeeResSimplified.build();
     }
 
     @Override
@@ -136,7 +179,32 @@ public class EmployeeMapperImpl implements EmployeeMapper {
 
         Set<EmployeeResSimplified> set = new HashSet<EmployeeResSimplified>( Math.max( (int) ( employees.size() / .75f ) + 1, 16 ) );
         for ( Employee employee : employees ) {
-            set.add( employeeToEmployeeResSimplified( employee ) );
+            set.add( toEmployeeSimplified( employee ) );
+        }
+
+        return set;
+    }
+
+    protected Role roleReqToRole(RoleReq roleReq) {
+        if ( roleReq == null ) {
+            return null;
+        }
+
+        RoleBuilder role = Role.builder();
+
+        role.name( roleReq.getName() );
+
+        return role.build();
+    }
+
+    protected Set<Role> roleReqListToRoleSet(List<RoleReq> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        Set<Role> set = new HashSet<Role>( Math.max( (int) ( list.size() / .75f ) + 1, 16 ) );
+        for ( RoleReq roleReq : list ) {
+            set.add( roleReqToRole( roleReq ) );
         }
 
         return set;
@@ -156,23 +224,30 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         return teamResSimplified.build();
     }
 
-    protected EmployeeResSimplified employeeToEmployeeResSimplified(Employee employee) {
-        if ( employee == null ) {
+    protected RoleRes roleToRoleRes(Role role) {
+        if ( role == null ) {
             return null;
         }
 
-        EmployeeResSimplifiedBuilder employeeResSimplified = EmployeeResSimplified.builder();
+        RoleResBuilder roleRes = RoleRes.builder();
 
-        employeeResSimplified.CIN( employee.getCIN() );
-        employeeResSimplified.birthDate( employee.getBirthDate() );
-        employeeResSimplified.email( employee.getEmail() );
-        employeeResSimplified.firstName( employee.getFirstName() );
-        employeeResSimplified.id( employee.getId() );
-        employeeResSimplified.lastName( employee.getLastName() );
-        employeeResSimplified.password( employee.getPassword() );
-        employeeResSimplified.phoneNumber( employee.getPhoneNumber() );
-        employeeResSimplified.username( employee.getUsername() );
+        roleRes.description( role.getDescription() );
+        roleRes.id( role.getId() );
+        roleRes.name( role.getName() );
 
-        return employeeResSimplified.build();
+        return roleRes.build();
+    }
+
+    protected Set<RoleRes> roleSetToRoleResSet(Set<Role> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<RoleRes> set1 = new HashSet<RoleRes>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( Role role : set ) {
+            set1.add( roleToRoleRes( role ) );
+        }
+
+        return set1;
     }
 }

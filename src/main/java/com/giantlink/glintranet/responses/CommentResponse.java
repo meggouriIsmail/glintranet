@@ -8,9 +8,11 @@ import lombok.Data;
 @Data
 @Builder
 public class CommentResponse {
-	private String id;
+	private Long id;
 
 	private String content;
 
 	private Date commentDate;
+	
+	private EmployeeCommentRes employeeCommentResponse;
 }

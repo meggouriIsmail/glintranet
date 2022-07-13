@@ -1,6 +1,6 @@
 package com.giantlink.glintranet.responses;
 
-import java.util.Date;
+import java.util.Set;
 
 import lombok.Builder;
 import lombok.Data;
@@ -20,9 +20,9 @@ public class EmployeeResSimplified {
 
 	private String email;
 
-	private String password;
-
 	private String phoneNumber;
 
-	private Date birthDate;
+	private String birthDate;
+	
+	private Set<RoleRes> roles;
 }

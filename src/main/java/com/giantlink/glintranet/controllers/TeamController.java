@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.giantlink.glintranet.requests.TeamRequest;
-import com.giantlink.glintranet.responses.CommentResponse;
 import com.giantlink.glintranet.responses.TeamResponse;
 import com.giantlink.glintranet.services.TeamService;
 

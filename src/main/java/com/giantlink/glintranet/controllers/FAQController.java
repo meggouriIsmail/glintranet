@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import com.giantlink.glintranet.services.FAQService;
 
 @RestController
 @RequestMapping("/api/faq")
+@CrossOrigin(origins = { "http://localhost:4200" })
 public class FAQController 
 {
 	@Autowired
@@ -40,7 +42,13 @@ public class FAQController
 		List<FAQResponse> response = faqService.getAll();
 		return new ResponseEntity<List<FAQResponse>>(response, HttpStatus.OK);
 	}
-	
+
+	@GetMapping("section/{sectionId}")
+	public ResponseEntity<List<FAQResponse>> getAll(@PathVariable Long sectionId)
+	{
+		List<FAQResponse> response = faqService.getAllBySection(sectionId);
+		return new ResponseEntity<List<FAQResponse>>(response, HttpStatus.OK);
+	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<FAQResponse> getFAQ(@PathVariable Long id)
@@ -57,14 +65,14 @@ public class FAQController
 	}
 	
 	
-	@PutMapping("/up/{id}")
+	@GetMapping("/up/{id}")
 	public ResponseEntity<FAQResponse> voteUp(@PathVariable Long id)
 	{
 		FAQResponse response = faqService.voteUp(id);
 		return new ResponseEntity<FAQResponse>(response,HttpStatus.OK);
 	}
 	
-	@PutMapping("/down/{id}")
+	@GetMapping("/down/{id}")
 	public ResponseEntity<?> voteDown(@PathVariable Long id)
 	{
 		return new ResponseEntity<>(faqService.voteDown(id), HttpStatus.OK);

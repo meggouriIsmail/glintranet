@@ -8,18 +8,21 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.giantlink.glintranet.entities.Employee;
 import com.giantlink.glintranet.entities.FAQ;
 import com.giantlink.glintranet.entities.Section;
 import com.giantlink.glintranet.entities.Tag;
+import com.giantlink.glintranet.mappers.EmployeeMapper;
 import com.giantlink.glintranet.mappers.FAQMapper;
 import com.giantlink.glintranet.repositories.EmployeeRepository;
 import com.giantlink.glintranet.repositories.FAQRepository;
 import com.giantlink.glintranet.repositories.SectionRepository;
 import com.giantlink.glintranet.repositories.TagRepository;
 import com.giantlink.glintranet.requests.FAQRequest;
+import com.giantlink.glintranet.responses.CommentResponse;
 import com.giantlink.glintranet.responses.FAQResponse;
 import com.giantlink.glintranet.services.FAQService;
 
@@ -75,8 +78,55 @@ public class FAQServiceImpl implements FAQService {
 
 	@Override
 	public List<FAQResponse> getAll() {
+		
+		
 		List<FAQResponse> allFAQs = new ArrayList<FAQResponse>();
-		faqRepository.findAll().forEach(faq -> allFAQs.add(faqMapper.entityToResponse(faq)));
+		faqRepository.findAll(Sort.by(Sort.Direction.DESC, "postingDate")).forEach(faq -> {
+			List<CommentResponse> commentResponses = new ArrayList<CommentResponse>();
+			
+			faq.getComments().forEach(comment -> {
+				CommentResponse response = CommentResponse.builder()
+						.id(comment.getId())
+						.commentDate(comment.getCommentDate())
+						.content(comment.getContent())
+						.employeeCommentResponse(EmployeeMapper.INSTANCE.employeeToEmployeeComment(comment.getEmployee()))
+						.build();
+						
+						commentResponses.add(response);
+					});
+			FAQResponse faqResponse = faqMapper.entityToResponse(faq);
+			faqResponse.setComments(commentResponses);
+			
+			allFAQs.add(faqResponse);
+			
+		});
+		return allFAQs;
+	}
+	
+	@Override
+	public List<FAQResponse> getAllBySection(Long sectionId) {
+		
+		
+		List<FAQResponse> allFAQs = new ArrayList<FAQResponse>();
+		faqRepository.findAllBySection(sectionId).forEach(faq -> {
+			List<CommentResponse> commentResponses = new ArrayList<CommentResponse>();
+			
+			faq.getComments().forEach(comment -> {
+				CommentResponse response = CommentResponse.builder()
+						.id(comment.getId())
+						.commentDate(comment.getCommentDate())
+						.content(comment.getContent())
+						.employeeCommentResponse(EmployeeMapper.INSTANCE.employeeToEmployeeComment(comment.getEmployee()))
+						.build();
+				
+				commentResponses.add(response);
+			});
+			FAQResponse faqResponse = faqMapper.entityToResponse(faq);
+			faqResponse.setComments(commentResponses);
+			
+			allFAQs.add(faqResponse);
+			
+		});
 		return allFAQs;
 	}
 
@@ -88,6 +138,21 @@ public class FAQServiceImpl implements FAQService {
 		}
 
 		FAQResponse response = faqMapper.entityToResponse(faqRepository.getById(id));
+
+		List<CommentResponse> commentResponses = new ArrayList<CommentResponse>();
+		
+		faqRepository.getById(id).getComments().forEach(comment -> {
+			CommentResponse commentResponse = CommentResponse.builder()
+					.id(comment.getId())
+					.commentDate(comment.getCommentDate())
+					.content(comment.getContent())
+					.employeeCommentResponse(EmployeeMapper.INSTANCE.employeeToEmployeeComment(comment.getEmployee()))
+					.build();
+					
+					commentResponses.add(commentResponse);
+				});
+		response.setComments(commentResponses);
+		
 		return response;
 	}
 
@@ -132,8 +197,11 @@ public class FAQServiceImpl implements FAQService {
 	public FAQResponse voteDown(Long id) {
 		FAQ faq = faqRepository.getById(id);
 		int vote = faq.getVotes();
-		vote--;
+		int voteDown = faq.getVotesDown();
+		vote++;
+		voteDown++;
 		faq.setVotes(vote);
+		faq.setVotesDown(voteDown);
 		faqRepository.save(faq);
 
 		return faqMapper.entityToResponse(faq);
@@ -143,8 +211,11 @@ public class FAQServiceImpl implements FAQService {
 	public FAQResponse voteUp(Long id) {
 		FAQ faq = faqRepository.findById(id).get();
 		int vote = faq.getVotes();
+		int voteUp = faq.getVotesUp();
 		vote++;
+		voteUp++;
 		faq.setVotes(vote);
+		faq.setVotesUp(voteUp);
 		faqRepository.save(faq);
 
 		return faqMapper.entityToResponse(faq);

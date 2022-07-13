@@ -1,9 +1,8 @@
 package com.giantlink.glintranet.controllers;
 
-import java.util.Map;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.giantlink.glintranet.requests.ProjectRequest;
@@ -28,12 +26,25 @@ public class ProjectController {
 	@Autowired
 	private ProjectService projectService;
 
+	/*
+	 * @GetMapping public ResponseEntity<Map<String, Object>>
+	 * getAll(@RequestParam(defaultValue = "0") int page,
+	 * 
+	 * @RequestParam(defaultValue = "2") int size, @RequestParam(defaultValue = "",
+	 * name = "name") String name) { org.springframework.data.domain.Pageable
+	 * pageable = PageRequest.of(page, size); return new ResponseEntity<Map<String,
+	 * Object>>(projectService.getAllPaginations(name, pageable), HttpStatus.OK);
+	 * 
+	 * }
+	 */
+	
+	
 	@GetMapping
-	public ResponseEntity<Map<String, Object>> getAll(@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "2") int size, @RequestParam(defaultValue = "", name = "name") String name) {
-		org.springframework.data.domain.Pageable pageable = PageRequest.of(page, size);
-		return new ResponseEntity<Map<String, Object>>(projectService.getAllPaginations(name, pageable), HttpStatus.OK);
-
+	public ResponseEntity<List<ProjectResponse>> getAll()
+	{
+		List<ProjectResponse> list = projectService.getAll();
+		return new ResponseEntity<List<ProjectResponse>>(list, HttpStatus.OK);
+		
 	}
 
 	@PostMapping

@@ -4,6 +4,7 @@ import com.giantlink.glintranet.entities.Comment;
 import com.giantlink.glintranet.entities.Employee;
 import com.giantlink.glintranet.entities.FAQ;
 import com.giantlink.glintranet.entities.FAQ.FAQBuilder;
+import com.giantlink.glintranet.entities.Role;
 import com.giantlink.glintranet.entities.Section;
 import com.giantlink.glintranet.entities.Tag;
 import com.giantlink.glintranet.requests.FAQRequest;
@@ -13,6 +14,8 @@ import com.giantlink.glintranet.responses.EmployeeResSimplified;
 import com.giantlink.glintranet.responses.EmployeeResSimplified.EmployeeResSimplifiedBuilder;
 import com.giantlink.glintranet.responses.FAQResponse;
 import com.giantlink.glintranet.responses.FAQResponse.FAQResponseBuilder;
+import com.giantlink.glintranet.responses.RoleRes;
+import com.giantlink.glintranet.responses.RoleRes.RoleResBuilder;
 import com.giantlink.glintranet.responses.SectionResponse;
 import com.giantlink.glintranet.responses.SectionResponse.SectionResponseBuilder;
 import java.util.ArrayList;
@@ -24,7 +27,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-07-12T13:17:47+0100",
+    date = "2022-07-13T11:16:24+0100",
     comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.50.v20210914-1429, environment: Java 17.0.2 (Eclipse Adoptium)"
 )
 @Component
@@ -43,6 +46,8 @@ public class FAQMapperImpl implements FAQMapper {
         fAQ.postingDate( faqRequest.getPostingDate() );
         fAQ.status( faqRequest.getStatus() );
         fAQ.votes( faqRequest.getVotes() );
+        fAQ.votesDown( faqRequest.getVotesDown() );
+        fAQ.votesUp( faqRequest.getVotesUp() );
 
         return fAQ.build();
     }
@@ -68,6 +73,8 @@ public class FAQMapperImpl implements FAQMapper {
             fAQResponse.tags( new HashSet<Tag>( set ) );
         }
         fAQResponse.votes( faq.getVotes() );
+        fAQResponse.votesDown( faq.getVotesDown() );
+        fAQResponse.votesUp( faq.getVotesUp() );
 
         return fAQResponse.build();
     }
@@ -95,7 +102,7 @@ public class FAQMapperImpl implements FAQMapper {
 
         commentResponse.commentDate( comment.getCommentDate() );
         commentResponse.content( comment.getContent() );
-        commentResponse.id( String.valueOf( comment.getId() ) );
+        commentResponse.id( comment.getId() );
 
         return commentResponse.build();
     }
@@ -113,6 +120,33 @@ public class FAQMapperImpl implements FAQMapper {
         return list;
     }
 
+    protected RoleRes roleToRoleRes(Role role) {
+        if ( role == null ) {
+            return null;
+        }
+
+        RoleResBuilder roleRes = RoleRes.builder();
+
+        roleRes.description( role.getDescription() );
+        roleRes.id( role.getId() );
+        roleRes.name( role.getName() );
+
+        return roleRes.build();
+    }
+
+    protected Set<RoleRes> roleSetToRoleResSet(Set<Role> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<RoleRes> set1 = new HashSet<RoleRes>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( Role role : set ) {
+            set1.add( roleToRoleRes( role ) );
+        }
+
+        return set1;
+    }
+
     protected EmployeeResSimplified employeeToEmployeeResSimplified(Employee employee) {
         if ( employee == null ) {
             return null;
@@ -126,8 +160,8 @@ public class FAQMapperImpl implements FAQMapper {
         employeeResSimplified.firstName( employee.getFirstName() );
         employeeResSimplified.id( employee.getId() );
         employeeResSimplified.lastName( employee.getLastName() );
-        employeeResSimplified.password( employee.getPassword() );
         employeeResSimplified.phoneNumber( employee.getPhoneNumber() );
+        employeeResSimplified.roles( roleSetToRoleResSet( employee.getRoles() ) );
         employeeResSimplified.username( employee.getUsername() );
 
         return employeeResSimplified.build();

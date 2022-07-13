@@ -8,6 +8,7 @@ import org.mapstruct.factory.Mappers;
 
 import com.giantlink.glintranet.entities.Employee;
 import com.giantlink.glintranet.requests.EmployeeRequest;
+import com.giantlink.glintranet.responses.EmployeeCommentRes;
 import com.giantlink.glintranet.responses.EmployeeResSimplified;
 import com.giantlink.glintranet.responses.EmployeeResponse;
 
@@ -19,14 +20,17 @@ public interface EmployeeMapper {
 
 	EmployeeResponse employeeToEmployeeResponse(Employee employee);
 
+	EmployeeCommentRes employeeToEmployeeComment(Employee employee);
+
 	List<EmployeeResponse> mapEmployee(List<Employee> employees);
 
 	Set<EmployeeResponse> mapEmployee(Set<Employee> employees);
 	
 	Set<Employee> mapEmployeeRequest(Set<EmployeeRequest> employees);
 	
-
 	List<EmployeeResSimplified> mapEmployeeSimplified(List<Employee> employees);
+
+	EmployeeResSimplified toEmployeeSimplified(Employee employees);
 
 	Set<EmployeeResSimplified> mapEmployeeSimplified(Set<Employee> employees);
 }

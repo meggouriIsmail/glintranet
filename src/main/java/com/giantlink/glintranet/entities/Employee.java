@@ -1,6 +1,5 @@
 package com.giantlink.glintranet.entities;
 
-import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -10,12 +9,13 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
-
-import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -56,7 +56,7 @@ public class Employee {
 	@Column(length = 25, nullable = false)
 	private String email;
 
-	@Size(min = 8, max = 20)
+	@Size(min = 8, max = 200)
 	@Column(nullable = false)
 	private String password;
 
@@ -64,14 +64,33 @@ public class Employee {
 	@Column(nullable = false)
 	private String phoneNumber;
 
-	@CreationTimestamp
-	private Date birthDate;
+	@ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+	@JoinTable(name = "employee_role",
+		joinColumns = @JoinColumn(name = "emp_id"),
+		inverseJoinColumns = @JoinColumn(name = "role_id")
+	) 
+	private Set<Role> roles;
 
-	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	//@CreationTimestamp
+	private String birthDate;
+
+	@OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	@JsonBackReference
 	private Set<FAQ> FAQs;
 	
+	@OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+	@JsonBackReference
+	private Set<Document> documents;
+	
+	@OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+	@JsonBackReference
+	private Set<FeedBack> feedBacks;
+	
 	@ManyToOne()
     private Team team;
+
+	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+	@JsonBackReference
+	private Set<Comment> comments;
 
 }

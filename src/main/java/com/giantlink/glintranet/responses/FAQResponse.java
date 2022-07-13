@@ -22,6 +22,10 @@ public class FAQResponse
 	
 	private int votes;
 	
+	private int votesUp;
+	
+	private int votesDown;
+	
 	private Boolean status;
 	
 	private EmployeeResSimplified employee;
