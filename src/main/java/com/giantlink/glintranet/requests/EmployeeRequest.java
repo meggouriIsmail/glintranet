@@ -40,7 +40,7 @@ public class EmployeeRequest
 	@Column(nullable = false)
 	private String phoneNumber;
 	
-	private List<RoleReq> roles;
+	private List<RoleRequest> roles;
 	
 
 	private String birthDate;

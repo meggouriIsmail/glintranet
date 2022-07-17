@@ -10,7 +10,7 @@ import com.giantlink.glintranet.entities.Team;
 import com.giantlink.glintranet.entities.Team.TeamBuilder;
 import com.giantlink.glintranet.requests.EmployeeRequest;
 import com.giantlink.glintranet.requests.ProjectRequest;
-import com.giantlink.glintranet.requests.RoleReq;
+import com.giantlink.glintranet.requests.RoleRequest;
 import com.giantlink.glintranet.requests.TeamRequest;
 import com.giantlink.glintranet.responses.TeamResponse;
 import com.giantlink.glintranet.responses.TeamResponse.TeamResponseBuilder;
@@ -23,8 +23,13 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
+<<<<<<< HEAD
     date = "2022-07-13T14:18:47+0100",
     comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.50.v20210914-1429, environment: Java 17.0.2 (Eclipse Adoptium)"
+=======
+    date = "2022-07-16T12:28:51+0100",
+    comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.0.v20210708-0430, environment: Java 17 (Eclipse Adoptium)"
+>>>>>>> e0c5843f9a874028499c6accdb15ca66f5bd7dd4
 )
 @Component
 public class TeamMapperImpl implements TeamMapper {
@@ -88,26 +93,27 @@ public class TeamMapperImpl implements TeamMapper {
         return teamResponse.build();
     }
 
-    protected Role roleReqToRole(RoleReq roleReq) {
-        if ( roleReq == null ) {
+    protected Role roleRequestToRole(RoleRequest roleRequest) {
+        if ( roleRequest == null ) {
             return null;
         }
 
         RoleBuilder role = Role.builder();
 
-        role.name( roleReq.getName() );
+        role.description( roleRequest.getDescription() );
+        role.name( roleRequest.getName() );
 
         return role.build();
     }
 
-    protected Set<Role> roleReqListToRoleSet(List<RoleReq> list) {
+    protected Set<Role> roleRequestListToRoleSet(List<RoleRequest> list) {
         if ( list == null ) {
             return null;
         }
 
         Set<Role> set = new HashSet<Role>( Math.max( (int) ( list.size() / .75f ) + 1, 16 ) );
-        for ( RoleReq roleReq : list ) {
-            set.add( roleReqToRole( roleReq ) );
+        for ( RoleRequest roleRequest : list ) {
+            set.add( roleRequestToRole( roleRequest ) );
         }
 
         return set;
@@ -127,7 +133,7 @@ public class TeamMapperImpl implements TeamMapper {
         employee.lastName( employeeRequest.getLastName() );
         employee.password( employeeRequest.getPassword() );
         employee.phoneNumber( employeeRequest.getPhoneNumber() );
-        employee.roles( roleReqListToRoleSet( employeeRequest.getRoles() ) );
+        employee.roles( roleRequestListToRoleSet( employeeRequest.getRoles() ) );
         employee.username( employeeRequest.getUsername() );
 
         return employee.build();
