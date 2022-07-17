@@ -14,8 +14,8 @@ import com.giantlink.glintranet.responses.EmployeeResSimplified;
 import com.giantlink.glintranet.responses.EmployeeResSimplified.EmployeeResSimplifiedBuilder;
 import com.giantlink.glintranet.responses.FAQResponse;
 import com.giantlink.glintranet.responses.FAQResponse.FAQResponseBuilder;
-import com.giantlink.glintranet.responses.RoleRes;
-import com.giantlink.glintranet.responses.RoleRes.RoleResBuilder;
+import com.giantlink.glintranet.responses.RoleResponse;
+import com.giantlink.glintranet.responses.RoleResponse.RoleResponseBuilder;
 import com.giantlink.glintranet.responses.SectionResponse;
 import com.giantlink.glintranet.responses.SectionResponse.SectionResponseBuilder;
 import java.util.ArrayList;
@@ -27,8 +27,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-07-06T15:19:41+0100",
-    comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.50.v20210914-1429, environment: Java 17.0.1 (Eclipse Adoptium)"
+    date = "2022-07-16T12:28:51+0100",
+    comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.0.v20210708-0430, environment: Java 17 (Eclipse Adoptium)"
 )
 @Component
 public class FAQMapperImpl implements FAQMapper {
@@ -120,28 +120,28 @@ public class FAQMapperImpl implements FAQMapper {
         return list;
     }
 
-    protected RoleRes roleToRoleRes(Role role) {
+    protected RoleResponse roleToRoleResponse(Role role) {
         if ( role == null ) {
             return null;
         }
 
-        RoleResBuilder roleRes = RoleRes.builder();
+        RoleResponseBuilder roleResponse = RoleResponse.builder();
 
-        roleRes.description( role.getDescription() );
-        roleRes.id( role.getId() );
-        roleRes.name( role.getName() );
+        roleResponse.description( role.getDescription() );
+        roleResponse.id( role.getId() );
+        roleResponse.name( role.getName() );
 
-        return roleRes.build();
+        return roleResponse.build();
     }
 
-    protected Set<RoleRes> roleSetToRoleResSet(Set<Role> set) {
+    protected Set<RoleResponse> roleSetToRoleResponseSet(Set<Role> set) {
         if ( set == null ) {
             return null;
         }
 
-        Set<RoleRes> set1 = new HashSet<RoleRes>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        Set<RoleResponse> set1 = new HashSet<RoleResponse>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
         for ( Role role : set ) {
-            set1.add( roleToRoleRes( role ) );
+            set1.add( roleToRoleResponse( role ) );
         }
 
         return set1;
@@ -161,7 +161,7 @@ public class FAQMapperImpl implements FAQMapper {
         employeeResSimplified.id( employee.getId() );
         employeeResSimplified.lastName( employee.getLastName() );
         employeeResSimplified.phoneNumber( employee.getPhoneNumber() );
-        employeeResSimplified.roles( roleSetToRoleResSet( employee.getRoles() ) );
+        employeeResSimplified.roles( roleSetToRoleResponseSet( employee.getRoles() ) );
         employeeResSimplified.username( employee.getUsername() );
 
         return employeeResSimplified.build();
