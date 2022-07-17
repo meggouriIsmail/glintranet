@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.giantlink.glintranet.entities.Document;
 import com.giantlink.glintranet.requests.DocumentRequest;
+import com.giantlink.glintranet.responses.DocResponse;
 
 public interface DocumentService 
 {
@@ -17,6 +18,6 @@ public interface DocumentService
 	
 	Document getDoc(Long id);
 
-	List<Document> getDocs();
+	List<DocResponse> getDocs();
 	
 }

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.giantlink.glintranet.entities.Document;
+import com.giantlink.glintranet.responses.DocResponse;
 import com.giantlink.glintranet.services.DocumentService;
 
 @RestController
@@ -52,9 +53,9 @@ public class DocumentController
 	}
 	
 	@GetMapping()
-	public ResponseEntity<List<Document>> getOne()
+	public ResponseEntity<List<DocResponse>> getOne()
 	{
-		return new ResponseEntity<List<Document>>(documentService.getDocs(),HttpStatus.OK);
+		return new ResponseEntity<List<DocResponse>>(documentService.getDocs(),HttpStatus.OK);
 	}
 	
 	@GetMapping("/get/{id}")
