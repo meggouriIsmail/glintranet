@@ -51,26 +51,29 @@ public class EmployeeServiceImpl implements EmployeeService{
 		if(findEmployee.isPresent()) 
 		{	throw new NonUniqueResultException(Employee.class.getSimpleName()+ " already exist"); }
 		
-		Set<Role> roles = new HashSet<Role>();
-		
-		employeeRequest.getRoles().forEach(role -> {
-			Optional<Role> optional = roleRepository.findByName(role.getName());
-			
-			if (optional.isPresent()) roles.add(optional.get());
-		});
-		
 		Employee newEmployee = Employee.builder().firstName(employeeRequest.getFirstName())
-										.lastName(employeeRequest.getLastName())
-										.CIN(employeeRequest.getCIN())
-										.username(employeeRequest.getUsername())
-										.email(employeeRequest.getEmail())
-										.password(bCryptPasswordEncoder.encode(employeeRequest.getPassword()))
-										.phoneNumber(employeeRequest.getPhoneNumber())
-										.birthDate(employeeRequest.getBirthDate())
-										.roles(roles)
-										.build();
+				.lastName(employeeRequest.getLastName())
+				.CIN(employeeRequest.getCIN())
+				.username(employeeRequest.getUsername())
+				.email(employeeRequest.getEmail())
+				.password(bCryptPasswordEncoder.encode(employeeRequest.getPassword()))
+				.phoneNumber(employeeRequest.getPhoneNumber())
+				.birthDate(employeeRequest.getBirthDate())
+				.build();
 		
-		return mapper.employeeToEmployeeResponse(employeeRepository.save(newEmployee));
+		Set<Role> roles = newEmployee.getRoles() == null ? new HashSet<>() : newEmployee.getRoles();
+		if(!employeeRequest.getRoles().isEmpty()) 
+		{
+			employeeRequest.getRoles().forEach(r -> {
+				Optional<Role> oRole = roleRepository.findByName(r.getName());
+				if(oRole.isPresent()) 
+				{ roles.add(oRole.get());		}
+			});
+			newEmployee.setRoles(roles);
+			employeeRepository.save(newEmployee);
+		}
+		
+		return mapper.employeeToEmployeeResponse(newEmployee);
 		
 	}
 

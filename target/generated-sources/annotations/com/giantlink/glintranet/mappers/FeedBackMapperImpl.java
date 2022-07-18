@@ -14,8 +14,8 @@ import com.giantlink.glintranet.responses.FeedBackTypeResponse;
 import com.giantlink.glintranet.responses.FeedBackTypeResponse.FeedBackTypeResponseBuilder;
 import com.giantlink.glintranet.responses.ProjectResponse;
 import com.giantlink.glintranet.responses.ProjectResponse.ProjectResponseBuilder;
-import com.giantlink.glintranet.responses.RoleRes;
-import com.giantlink.glintranet.responses.RoleRes.RoleResBuilder;
+import com.giantlink.glintranet.responses.RoleResponse;
+import com.giantlink.glintranet.responses.RoleResponse.RoleResponseBuilder;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-07-07T09:28:34+0100",
+    date = "2022-07-18T09:15:18+0100",
     comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.50.v20210914-1429, environment: Java 17.0.1 (Eclipse Adoptium)"
 )
 @Component
@@ -76,28 +76,28 @@ public class FeedBackMapperImpl implements FeedBackMapper {
         return list;
     }
 
-    protected RoleRes roleToRoleRes(Role role) {
+    protected RoleResponse roleToRoleResponse(Role role) {
         if ( role == null ) {
             return null;
         }
 
-        RoleResBuilder roleRes = RoleRes.builder();
+        RoleResponseBuilder roleResponse = RoleResponse.builder();
 
-        roleRes.description( role.getDescription() );
-        roleRes.id( role.getId() );
-        roleRes.name( role.getName() );
+        roleResponse.description( role.getDescription() );
+        roleResponse.id( role.getId() );
+        roleResponse.name( role.getName() );
 
-        return roleRes.build();
+        return roleResponse.build();
     }
 
-    protected Set<RoleRes> roleSetToRoleResSet(Set<Role> set) {
+    protected Set<RoleResponse> roleSetToRoleResponseSet(Set<Role> set) {
         if ( set == null ) {
             return null;
         }
 
-        Set<RoleRes> set1 = new HashSet<RoleRes>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        Set<RoleResponse> set1 = new HashSet<RoleResponse>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
         for ( Role role : set ) {
-            set1.add( roleToRoleRes( role ) );
+            set1.add( roleToRoleResponse( role ) );
         }
 
         return set1;
@@ -117,7 +117,7 @@ public class FeedBackMapperImpl implements FeedBackMapper {
         employeeResSimplified.id( employee.getId() );
         employeeResSimplified.lastName( employee.getLastName() );
         employeeResSimplified.phoneNumber( employee.getPhoneNumber() );
-        employeeResSimplified.roles( roleSetToRoleResSet( employee.getRoles() ) );
+        employeeResSimplified.roles( roleSetToRoleResponseSet( employee.getRoles() ) );
         employeeResSimplified.username( employee.getUsername() );
 
         return employeeResSimplified.build();

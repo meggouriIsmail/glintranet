@@ -64,7 +64,7 @@ public class Employee {
 	@Column(nullable = false)
 	private String phoneNumber;
 
-	@ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "employee_role",
 		joinColumns = @JoinColumn(name = "emp_id"),
 		inverseJoinColumns = @JoinColumn(name = "role_id")

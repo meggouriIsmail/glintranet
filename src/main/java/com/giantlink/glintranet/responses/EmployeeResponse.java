@@ -32,7 +32,7 @@ public class EmployeeResponse
 	
 	private String birthDate;
 	
-	private Set<RoleRes> roles;
+	private Set<RoleResponse> roles;
 	
 	private Set<FAQ> FAQs;
 

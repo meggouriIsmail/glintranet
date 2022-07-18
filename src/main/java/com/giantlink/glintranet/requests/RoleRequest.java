@@ -1,4 +1,4 @@
-package com.giantlink.glintranet.responses;
+package com.giantlink.glintranet.requests;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoleRes {
-	private long id;
-
+public class RoleRequest 
+{
 	private String name;
-
 	private String description;
+
 }
