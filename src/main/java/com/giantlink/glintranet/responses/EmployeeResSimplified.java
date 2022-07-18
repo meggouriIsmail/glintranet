@@ -24,5 +24,5 @@ public class EmployeeResSimplified {
 
 	private String birthDate;
 	
-	private Set<RoleRes> roles;
+	private Set<RoleResponse> roles;
 }

@@ -75,7 +75,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
         res.addHeader("user_email", employeeResponse.getEmail());
         
-        res.getWriter().write("{\"token\": \"" + token + "\", \"id\": \""+ employeeResponse.getId() + "\"}");
+        res.getWriter().write("{\"token\": \"" + token + "\", \"id\": \""+ employeeResponse.getId() 
+        + "\", \"username\": \""+ employeeResponse.getUsername() + "\"}");
 
     }  
 
