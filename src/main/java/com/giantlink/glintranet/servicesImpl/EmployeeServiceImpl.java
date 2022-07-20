@@ -121,7 +121,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		Optional<Employee> emp = employeeRepository.findByEmail(email);
-		if(emp.isEmpty()) throw new NoSuchElementException("employee doesn't exisit");
+		if(emp.isEmpty()) throw new NoSuchElementException("email is invalid");
 		return new User(emp.get().getEmail(), emp.get().getPassword(), new ArrayList<>());
 	}
 

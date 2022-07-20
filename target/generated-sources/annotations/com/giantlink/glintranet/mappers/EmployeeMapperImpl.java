@@ -27,8 +27,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-07-16T12:28:52+0100",
-    comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.0.v20210708-0430, environment: Java 17 (Eclipse Adoptium)"
+    date = "2022-07-19T12:35:50+0100",
+    comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.50.v20210914-1429, environment: Java 17.0.1 (Eclipse Adoptium)"
 )
 @Component
 public class EmployeeMapperImpl implements EmployeeMapper {
@@ -74,6 +74,7 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         employeeResponse.lastName( employee.getLastName() );
         employeeResponse.password( employee.getPassword() );
         employeeResponse.phoneNumber( employee.getPhoneNumber() );
+        employeeResponse.roles( roleSetToRoleResponseSet( employee.getRoles() ) );
         employeeResponse.team( teamToTeamResSimplified( employee.getTeam() ) );
         employeeResponse.username( employee.getUsername() );
 
@@ -90,6 +91,7 @@ public class EmployeeMapperImpl implements EmployeeMapper {
 
         employeeCommentRes.firstName( employee.getFirstName() );
         employeeCommentRes.lastName( employee.getLastName() );
+        employeeCommentRes.username( employee.getUsername() );
 
         return employeeCommentRes.build();
     }
@@ -211,20 +213,6 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         return set;
     }
 
-    protected TeamResSimplified teamToTeamResSimplified(Team team) {
-        if ( team == null ) {
-            return null;
-        }
-
-        TeamResSimplifiedBuilder teamResSimplified = TeamResSimplified.builder();
-
-        teamResSimplified.description( team.getDescription() );
-        teamResSimplified.id( team.getId() );
-        teamResSimplified.name( team.getName() );
-
-        return teamResSimplified.build();
-    }
-
     protected RoleResponse roleToRoleResponse(Role role) {
         if ( role == null ) {
             return null;
@@ -250,5 +238,19 @@ public class EmployeeMapperImpl implements EmployeeMapper {
         }
 
         return set1;
+    }
+
+    protected TeamResSimplified teamToTeamResSimplified(Team team) {
+        if ( team == null ) {
+            return null;
+        }
+
+        TeamResSimplifiedBuilder teamResSimplified = TeamResSimplified.builder();
+
+        teamResSimplified.description( team.getDescription() );
+        teamResSimplified.id( team.getId() );
+        teamResSimplified.name( team.getName() );
+
+        return teamResSimplified.build();
     }
 }

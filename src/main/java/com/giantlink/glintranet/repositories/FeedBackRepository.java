@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.giantlink.glintranet.entities.FeedBack;
-import com.giantlink.glintranet.entities.Project;
 
 public interface FeedBackRepository extends JpaRepository<FeedBack, Long>
 {
