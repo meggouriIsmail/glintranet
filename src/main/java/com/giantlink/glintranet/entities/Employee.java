@@ -14,6 +14,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -92,5 +93,8 @@ public class Employee {
 	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	@JsonBackReference
 	private Set<Comment> comments;
+	
+	@OneToOne(mappedBy = "employee")
+	private Reply reply;
 
 }

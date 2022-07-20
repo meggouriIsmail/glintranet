@@ -28,7 +28,7 @@ public class FAQResponse
 	
 	private Boolean status;
 	
-	private EmployeeResSimplified employee;
+	private EmployeeCommentRes employee;
 	
 	private SectionResponse section;
 
