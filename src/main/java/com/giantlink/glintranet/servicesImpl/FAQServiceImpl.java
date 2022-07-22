@@ -15,6 +15,7 @@ import com.giantlink.glintranet.entities.Employee;
 import com.giantlink.glintranet.entities.EmployeeFAQ;
 import com.giantlink.glintranet.entities.EmployeeFaqId;
 import com.giantlink.glintranet.entities.FAQ;
+import com.giantlink.glintranet.entities.Reply;
 import com.giantlink.glintranet.entities.Section;
 import com.giantlink.glintranet.entities.Tag;
 import com.giantlink.glintranet.mappers.EmployeeMapper;
@@ -27,6 +28,7 @@ import com.giantlink.glintranet.repositories.TagRepository;
 import com.giantlink.glintranet.requests.FAQRequest;
 import com.giantlink.glintranet.responses.CommentResponse;
 import com.giantlink.glintranet.responses.FAQResponse;
+import com.giantlink.glintranet.responses.ReplyResponse;
 import com.giantlink.glintranet.services.FAQService;
 
 @Service
@@ -78,7 +80,6 @@ public class FAQServiceImpl implements FAQService {
 			}
 
 			return faqMapper.entityToResponse(faq);
-			//werioh
 		}
 	}
 
@@ -153,6 +154,7 @@ public class FAQServiceImpl implements FAQService {
 					.commentDate(comment.getCommentDate())
 					.content(comment.getContent())
 					.employeeCommentResponse(EmployeeMapper.INSTANCE.employeeToEmployeeComment(comment.getEmployee()))
+					.replies(buildReplies(comment.getReplies()))
 					.build();
 					
 					commentResponses.add(commentResponse);
@@ -160,6 +162,22 @@ public class FAQServiceImpl implements FAQService {
 		response.setComments(commentResponses);
 		
 		return response;
+	}
+	
+	private Set<ReplyResponse> buildReplies(Set<Reply> replies){
+
+		Set<ReplyResponse> replyResponses = new HashSet<ReplyResponse>();
+		replies.forEach(reply -> {
+			ReplyResponse response = ReplyResponse.builder()
+					.id(reply.getId())
+					.content(reply.getContent())
+					.employeeCommentResponse(EmployeeMapper.INSTANCE.employeeToEmployeeComment(reply.getEmployee()))
+					.replyDate(reply.getReplyDate())
+					.build();
+			replyResponses.add(response);
+		});
+		
+		return replyResponses;
 	}
 
 	@Override

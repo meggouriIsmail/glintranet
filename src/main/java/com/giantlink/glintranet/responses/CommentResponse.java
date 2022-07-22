@@ -1,6 +1,7 @@
 package com.giantlink.glintranet.responses;
 
 import java.util.Date;
+import java.util.Set;
 
 import lombok.Builder;
 import lombok.Data;
@@ -15,4 +16,6 @@ public class CommentResponse {
 	private Date commentDate;
 	
 	private EmployeeCommentRes employeeCommentResponse;
+	
+	private Set<ReplyResponse> replies;
 }

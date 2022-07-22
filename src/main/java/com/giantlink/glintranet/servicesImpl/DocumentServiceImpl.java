@@ -18,9 +18,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.giantlink.glintranet.entities.DocType;
 import com.giantlink.glintranet.entities.Document;
 import com.giantlink.glintranet.entities.Employee;
+import com.giantlink.glintranet.mappers.DocMapper;
 import com.giantlink.glintranet.repositories.DocTypeRepository;
 import com.giantlink.glintranet.repositories.DocumentRepository;
 import com.giantlink.glintranet.repositories.EmployeeRepository;
+import com.giantlink.glintranet.responses.DocResponse;
 import com.giantlink.glintranet.services.DocumentService;
 
 @Service
@@ -78,9 +80,9 @@ public class DocumentServiceImpl implements DocumentService
 	}
 
 	@Override
-	public List<Document> getDocs() 
+	public List<DocResponse> getDocs() 
 	{
-		List<Document> documents = documentRepository.findAll();
+		List<DocResponse> documents = DocMapper.INSTANCE.mapResponses(documentRepository.findAll());
 		
 		return documents;
 	}

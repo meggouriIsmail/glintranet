@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.giantlink.glintranet.requests.CommentRequest;
+import com.giantlink.glintranet.requests.ReplyRequest;
 import com.giantlink.glintranet.responses.CommentResponse;
+import com.giantlink.glintranet.responses.ReplyResponse;
 import com.giantlink.glintranet.services.CommentService;
 
 @RestController
@@ -34,6 +36,12 @@ public class CommentController {
 	{
 		CommentResponse response = commentService.add(request);
 		return new ResponseEntity<CommentResponse>(response,HttpStatus.CREATED);
+	}
+	
+	@PostMapping("/reply")
+	public ResponseEntity<ReplyResponse> addReply(@RequestBody @Valid ReplyRequest request)
+	{
+		return new ResponseEntity<ReplyResponse>(commentService.add(request), HttpStatus.CREATED);
 	}
 	
 	@GetMapping

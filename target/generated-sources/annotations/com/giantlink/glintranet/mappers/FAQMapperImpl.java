@@ -4,18 +4,18 @@ import com.giantlink.glintranet.entities.Comment;
 import com.giantlink.glintranet.entities.Employee;
 import com.giantlink.glintranet.entities.FAQ;
 import com.giantlink.glintranet.entities.FAQ.FAQBuilder;
-import com.giantlink.glintranet.entities.Role;
+import com.giantlink.glintranet.entities.Reply;
 import com.giantlink.glintranet.entities.Section;
 import com.giantlink.glintranet.entities.Tag;
 import com.giantlink.glintranet.requests.FAQRequest;
 import com.giantlink.glintranet.responses.CommentResponse;
 import com.giantlink.glintranet.responses.CommentResponse.CommentResponseBuilder;
-import com.giantlink.glintranet.responses.EmployeeResSimplified;
-import com.giantlink.glintranet.responses.EmployeeResSimplified.EmployeeResSimplifiedBuilder;
+import com.giantlink.glintranet.responses.EmployeeCommentRes;
+import com.giantlink.glintranet.responses.EmployeeCommentRes.EmployeeCommentResBuilder;
 import com.giantlink.glintranet.responses.FAQResponse;
 import com.giantlink.glintranet.responses.FAQResponse.FAQResponseBuilder;
-import com.giantlink.glintranet.responses.RoleResponse;
-import com.giantlink.glintranet.responses.RoleResponse.RoleResponseBuilder;
+import com.giantlink.glintranet.responses.ReplyResponse;
+import com.giantlink.glintranet.responses.ReplyResponse.ReplyResponseBuilder;
 import com.giantlink.glintranet.responses.SectionResponse;
 import com.giantlink.glintranet.responses.SectionResponse.SectionResponseBuilder;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2022-07-20T09:03:52+0100",
+    date = "2022-07-22T09:12:14+0100",
     comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 1.4.50.v20210914-1429, environment: Java 17.0.1 (Eclipse Adoptium)"
 )
 @Component
@@ -63,7 +63,7 @@ public class FAQMapperImpl implements FAQMapper {
         fAQResponse.comments( commentSetToCommentResponseList( faq.getComments() ) );
         fAQResponse.content( faq.getContent() );
         fAQResponse.description( faq.getDescription() );
-        fAQResponse.employee( employeeToEmployeeResSimplified( faq.getEmployee() ) );
+        fAQResponse.employee( employeeToEmployeeCommentRes( faq.getEmployee() ) );
         fAQResponse.id( faq.getId() );
         fAQResponse.postingDate( faq.getPostingDate() );
         fAQResponse.section( sectionToSectionResponse( faq.getSection() ) );
@@ -93,6 +93,33 @@ public class FAQMapperImpl implements FAQMapper {
         return list;
     }
 
+    protected ReplyResponse replyToReplyResponse(Reply reply) {
+        if ( reply == null ) {
+            return null;
+        }
+
+        ReplyResponseBuilder replyResponse = ReplyResponse.builder();
+
+        replyResponse.content( reply.getContent() );
+        replyResponse.id( reply.getId() );
+        replyResponse.replyDate( reply.getReplyDate() );
+
+        return replyResponse.build();
+    }
+
+    protected Set<ReplyResponse> replySetToReplyResponseSet(Set<Reply> set) {
+        if ( set == null ) {
+            return null;
+        }
+
+        Set<ReplyResponse> set1 = new HashSet<ReplyResponse>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
+        for ( Reply reply : set ) {
+            set1.add( replyToReplyResponse( reply ) );
+        }
+
+        return set1;
+    }
+
     protected CommentResponse commentToCommentResponse(Comment comment) {
         if ( comment == null ) {
             return null;
@@ -103,6 +130,7 @@ public class FAQMapperImpl implements FAQMapper {
         commentResponse.commentDate( comment.getCommentDate() );
         commentResponse.content( comment.getContent() );
         commentResponse.id( comment.getId() );
+        commentResponse.replies( replySetToReplyResponseSet( comment.getReplies() ) );
 
         return commentResponse.build();
     }
@@ -120,51 +148,18 @@ public class FAQMapperImpl implements FAQMapper {
         return list;
     }
 
-    protected RoleResponse roleToRoleResponse(Role role) {
-        if ( role == null ) {
-            return null;
-        }
-
-        RoleResponseBuilder roleResponse = RoleResponse.builder();
-
-        roleResponse.description( role.getDescription() );
-        roleResponse.id( role.getId() );
-        roleResponse.name( role.getName() );
-
-        return roleResponse.build();
-    }
-
-    protected Set<RoleResponse> roleSetToRoleResponseSet(Set<Role> set) {
-        if ( set == null ) {
-            return null;
-        }
-
-        Set<RoleResponse> set1 = new HashSet<RoleResponse>( Math.max( (int) ( set.size() / .75f ) + 1, 16 ) );
-        for ( Role role : set ) {
-            set1.add( roleToRoleResponse( role ) );
-        }
-
-        return set1;
-    }
-
-    protected EmployeeResSimplified employeeToEmployeeResSimplified(Employee employee) {
+    protected EmployeeCommentRes employeeToEmployeeCommentRes(Employee employee) {
         if ( employee == null ) {
             return null;
         }
 
-        EmployeeResSimplifiedBuilder employeeResSimplified = EmployeeResSimplified.builder();
+        EmployeeCommentResBuilder employeeCommentRes = EmployeeCommentRes.builder();
 
-        employeeResSimplified.CIN( employee.getCIN() );
-        employeeResSimplified.birthDate( employee.getBirthDate() );
-        employeeResSimplified.email( employee.getEmail() );
-        employeeResSimplified.firstName( employee.getFirstName() );
-        employeeResSimplified.id( employee.getId() );
-        employeeResSimplified.lastName( employee.getLastName() );
-        employeeResSimplified.phoneNumber( employee.getPhoneNumber() );
-        employeeResSimplified.roles( roleSetToRoleResponseSet( employee.getRoles() ) );
-        employeeResSimplified.username( employee.getUsername() );
+        employeeCommentRes.firstName( employee.getFirstName() );
+        employeeCommentRes.lastName( employee.getLastName() );
+        employeeCommentRes.username( employee.getUsername() );
 
-        return employeeResSimplified.build();
+        return employeeCommentRes.build();
     }
 
     protected SectionResponse sectionToSectionResponse(Section section) {

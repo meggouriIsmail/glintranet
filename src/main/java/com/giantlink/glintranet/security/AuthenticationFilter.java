@@ -45,7 +45,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 			return authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(creds.getEmail(), creds.getPassword(), new ArrayList<>()));
 		} catch (IOException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("email or password is invalid");
 		}
 	}
 	
@@ -64,9 +64,10 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         
         String token = Jwts.builder()
                 .setSubject(userName)
-                .claim("First Name", employeeResponse.getFirstName())
-                .claim("Last Name", employeeResponse.getLastName())
-                .claim("Role ", employeeResponse.getRole())
+                .claim("firstName", employeeResponse.getFirstName())
+                .claim("lastName", employeeResponse.getLastName())
+                .claim("Roles", employeeResponse.getRoles())
+                .claim("userName", employeeResponse.getUsername())
                 .setExpiration(new Date(System.currentTimeMillis() + SecurityConstants.EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS512, SecurityConstants.TOKEN_SECRET )
                 .compact();
@@ -75,8 +76,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         res.addHeader(SecurityConstants.HEADER_STRING, SecurityConstants.TOKEN_PREFIX + token);
         res.addHeader("user_email", employeeResponse.getEmail());
         
-        res.getWriter().write("{\"token\": \"" + token + "\", \"id\": \""+ employeeResponse.getId() 
-        + "\", \"username\": \""+ employeeResponse.getUsername() + "\"}");
+        res.getWriter().write("{\"token\": \"" + token + "\", \"id\": \""+ employeeResponse.getId() + "\"}");
 
     }  
 
