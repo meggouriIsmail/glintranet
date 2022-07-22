@@ -5,7 +5,12 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,13 +27,17 @@ import com.giantlink.glintranet.services.DocumentService;
 public class DocumentServiceImpl implements DocumentService 
 {
 	@Autowired
-	DocumentRepository documentRepository;
+	private  DocumentRepository documentRepository;
 	
 	@Autowired
-	EmployeeRepository employeeRepository;
+	private EmployeeRepository employeeRepository;
 	
 	@Autowired
-	DocTypeRepository typeRepository;
+	private DocTypeRepository typeRepository;
+	
+	@Autowired
+	private JavaMailSender mailSender;
+	
 
 	@Override
 	public void upload(MultipartFile file, Long empId, Long typeId) throws Exception 
@@ -36,15 +45,6 @@ public class DocumentServiceImpl implements DocumentService
 		Document document = new Document();		
 		Optional<Employee> employee = employeeRepository.findById(empId);
 		Optional<DocType> type  = typeRepository.findById(typeId);
-		
-		/*
-		 * if(!employee.isEmpty()) { throw new
-		 * NoSuchElementException(Employee.class.getSimpleName()+" doesnt exist"); }
-		 * 
-		 * if(!type.isPresent()) { throw new
-		 * NoSuchElementException(DocType.class.getSimpleName()+" doesnt exist"); }
-		 */
-		
 		
 		 try 
 		 {
@@ -58,8 +58,10 @@ public class DocumentServiceImpl implements DocumentService
 				
 				documentRepository.save(document);
 				
-				System.out.println(document.getDocumentName()+" "+document.getContentType()+" "+document.getCreationDate()+" "+
-									document.getData()+" "+document.getSize()+" "+document.getEmployee().getId());
+				sendEmail(document);
+				
+				//System.out.println(document.getDocumentName()+" "+document.getContentType()+" "+document.getCreationDate()+" "+
+									//document.getData()+" "+document.getSize()+" "+document.getEmployee().getId());
 	       } catch (Exception e) {
 	            throw new Exception("Could not save File: " + document.getDocumentName()+"   ---- "+e.getMessage());
 	       }
@@ -87,6 +89,47 @@ public class DocumentServiceImpl implements DocumentService
 	public Document getDoc(Long id) {
 		Document document = documentRepository.findById(id).get();
 		return document;
+	}
+	
+	public void sendEmail(Document document) 
+	{
+		MimeMessage message = mailSender.createMimeMessage();
+		Employee employee = employeeRepository.getById(document.getEmployee().getId());
+		List<Employee> employees = employeeRepository.findAll();
+		
+		
+		
+		new Thread(() ->
+		{
+			for (Employee employe : employees) 
+			{
+				if(!(employe.getId() == employee.getId())) 
+				{
+					try
+					{
+						message.setFrom("${spring.mail.username}");
+						message.addRecipients(Message.RecipientType.TO, employe.getEmail());
+						
+						String body = "Hello, "+ employe.getFirstName()+ " "+ employe.getLastName()+ "<br><br>"
+								+ "<b>" +employee.getFirstName()+" "+employee.getLastName()+" </b> added a new document in the plateforme <br>"
+										+ " check ASAP";
+						
+						message.setSubject("New Document");
+						message.setText(body, "UTF-8", "html");
+						
+						mailSender.send(message);
+						System.out.println("Mail sent succesfully");
+		
+					} catch (MessagingException e) 
+					{
+						System.out.println(" --------- *******- ---------- - - -- Mail Not Sent...");
+						e.printStackTrace();
+					}
+				}
+				}
+
+			}).start();
+		
 	}
 	
 	

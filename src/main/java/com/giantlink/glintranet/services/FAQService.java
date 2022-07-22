@@ -2,6 +2,7 @@ package com.giantlink.glintranet.services;
 
 import java.util.List;
 
+import com.giantlink.glintranet.entities.EmployeeFAQ;
 import com.giantlink.glintranet.requests.FAQRequest;
 import com.giantlink.glintranet.responses.FAQResponse;
 
@@ -21,4 +22,6 @@ public interface FAQService {
 	FAQResponse voteUp(Long id);
 
 	FAQResponse voteDown(Long id);
+	
+	EmployeeFAQ faqVote(Long id_employee, Long id_faq);
 }

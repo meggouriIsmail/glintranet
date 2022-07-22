@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.giantlink.glintranet.entities.EmployeeFAQ;
 import com.giantlink.glintranet.requests.FAQRequest;
 import com.giantlink.glintranet.responses.FAQResponse;
 import com.giantlink.glintranet.services.FAQService;
@@ -83,5 +84,12 @@ public class FAQController
 	{
 		faqService.deleteFaq(id);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@GetMapping("/vote/{empId}/{faqId}")
+	public ResponseEntity<EmployeeFAQ> faqVote(@PathVariable Long empId, @PathVariable Long faqId)
+	{
+		EmployeeFAQ employeeFAQ =  faqService.faqVote(empId, faqId);
+		return new ResponseEntity<EmployeeFAQ>(employeeFAQ, HttpStatus.OK);
 	}
 }

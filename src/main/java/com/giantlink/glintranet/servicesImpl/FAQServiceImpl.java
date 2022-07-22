@@ -1,4 +1,4 @@
-package com.giantlink.glintranet.servicesImpl;
+  package com.giantlink.glintranet.servicesImpl;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -12,11 +12,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.giantlink.glintranet.entities.Employee;
+import com.giantlink.glintranet.entities.EmployeeFAQ;
+import com.giantlink.glintranet.entities.EmployeeFaqId;
 import com.giantlink.glintranet.entities.FAQ;
 import com.giantlink.glintranet.entities.Section;
 import com.giantlink.glintranet.entities.Tag;
 import com.giantlink.glintranet.mappers.EmployeeMapper;
 import com.giantlink.glintranet.mappers.FAQMapper;
+import com.giantlink.glintranet.repositories.EmployeeFaqRepository;
 import com.giantlink.glintranet.repositories.EmployeeRepository;
 import com.giantlink.glintranet.repositories.FAQRepository;
 import com.giantlink.glintranet.repositories.SectionRepository;
@@ -39,6 +42,9 @@ public class FAQServiceImpl implements FAQService {
 
 	@Autowired
 	FAQRepository faqRepository;
+	
+	@Autowired
+	EmployeeFaqRepository employeeFaqRepository;
 
 	@Autowired
 	FAQMapper faqMapper;
@@ -194,13 +200,60 @@ public class FAQServiceImpl implements FAQService {
 	}
 
 	@Override
-	public FAQResponse voteDown(Long id) {
+	public FAQResponse voteDown(Long id) 
+	{
 		FAQ faq = faqRepository.getById(id);
+		Employee employee = employeeRepository.findById(faq.getEmployee().getId()).get();
+		
 		int vote = faq.getVotes();
-		int voteDown = faq.getVotesDown();
-		vote++;
-		voteDown++;
+		int voteDown = faq.getVotesDown(), voteUp = faq.getVotesUp();
+		
+		if(employeeFaqRepository.existsById(new EmployeeFaqId(employee.getId(),faq.getId())))
+		{
+			EmployeeFAQ employeeFAQ = employeeFaqRepository.findById(new EmployeeFaqId(employee.getId(),id)).get();
+			if(employeeFAQ.isVoted_down()) 
+			{
+				employeeFAQ.setVoted_down(false);
+				
+				employeeFaqRepository.save(employeeFAQ);
+				voteDown--;
+			}
+			else if(employeeFAQ.isVoted_up()) 
+			{
+				employeeFAQ.setVoted_up(false);
+				employeeFAQ.setVoted_down(true);
+				employeeFaqRepository.save(employeeFAQ);
+				voteUp--;
+				voteDown++;
+
+			}
+			
+			  else if(employeeFAQ.isVoted_up() == false && employeeFAQ.isVoted_down() == false) 
+			  { 
+				  employeeFAQ.setVoted_down(true);
+				  employeeFaqRepository.save(employeeFAQ); 
+				  voteDown++;
+			  } 
+		}
+		else 
+		{
+			EmployeeFAQ employeeFAQ2 = new EmployeeFAQ();
+			
+			employeeFAQ2.setEmployee(employee);
+			employeeFAQ2.setFaq(faq);
+			employeeFAQ2.setEmployeeFaqId(new EmployeeFaqId(employee.getId(), faq.getId()));
+			
+			employeeFAQ2.setVoted_up(true);
+			employeeFAQ2.setVoted_down(false);
+			
+			employeeFaqRepository.save(employeeFAQ2);
+			
+			vote++;
+			voteUp++;
+		} 
+		
 		faq.setVotes(vote);
+		faq.setVotesUp(voteUp);
 		faq.setVotesDown(voteDown);
 		faqRepository.save(faq);
 
@@ -208,17 +261,78 @@ public class FAQServiceImpl implements FAQService {
 	}
 
 	@Override
-	public FAQResponse voteUp(Long id) {
+	public FAQResponse voteUp(Long id) 
+	{
 		FAQ faq = faqRepository.findById(id).get();
+		Employee employee = employeeRepository.findById(faq.getEmployee().getId()).get();
+		
 		int vote = faq.getVotes();
-		int voteUp = faq.getVotesUp();
-		vote++;
-		voteUp++;
+		int voteUp = faq.getVotesUp(), voteDown = faq.getVotesDown();
+		 
+
+		if(employeeFaqRepository.existsById(new EmployeeFaqId(employee.getId(),faq.getId())))
+		{
+			EmployeeFAQ employeeFAQ = employeeFaqRepository.findById(new EmployeeFaqId(employee.getId(),id)).get();
+			if(employeeFAQ.isVoted_up()) 
+			{
+				employeeFAQ.setVoted_up(false);
+				employeeFaqRepository.save(employeeFAQ);
+				voteUp--;	
+			}
+			else if(employeeFAQ.isVoted_down()) 
+			{
+				employeeFAQ.setVoted_down(false);
+				employeeFAQ.setVoted_up(true);
+				employeeFaqRepository.save(employeeFAQ);
+
+				voteDown--;
+				voteUp++;
+
+			}
+			else if(employeeFAQ.isVoted_up() == false && employeeFAQ.isVoted_down() == false) 
+			{ 
+				employeeFAQ.setVoted_up(true);
+				employeeFaqRepository.save(employeeFAQ);
+				voteUp++; 
+			}
+			 
+		}
+		else 
+		{
+			EmployeeFAQ employeeFAQ2 = new EmployeeFAQ();
+			employeeFAQ2.setEmployee(employee);
+			employeeFAQ2.setFaq(faq);
+			employeeFAQ2.setEmployeeFaqId(new EmployeeFaqId(employee.getId(), faq.getId()));
+			
+			employeeFAQ2.setVoted_up(true);
+			employeeFAQ2.setVoted_down(false);
+			
+			vote++;
+			voteUp++;
+			
+			employeeFaqRepository.save(employeeFAQ2);
+		}
+		
+		
 		faq.setVotes(vote);
 		faq.setVotesUp(voteUp);
+		faq.setVotesDown(voteDown);
 		faqRepository.save(faq);
 
 		return faqMapper.entityToResponse(faq);
+	}
+
+	@Override
+	public EmployeeFAQ faqVote(Long id_employee, Long id_faq) 
+	{
+		Optional<EmployeeFAQ> found = employeeFaqRepository.findById(new EmployeeFaqId(id_employee,id_faq));
+		if(found.isEmpty()) 
+		{ throw new NoSuchElementException("No record");		}
+		
+		EmployeeFAQ employeeFAQ = found.get();
+		
+		
+		return employeeFAQ;
 	}
 
 }

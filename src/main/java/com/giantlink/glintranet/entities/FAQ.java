@@ -1,6 +1,7 @@
 package com.giantlink.glintranet.entities;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -21,6 +22,8 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -76,5 +79,9 @@ public class FAQ {
 	@OneToMany(mappedBy = "faq", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	@JsonBackReference
 	private Set<Comment> comments;
+	
+	@OneToMany(mappedBy = "faq", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonProperty(access = Access.WRITE_ONLY)
+	private List<EmployeeFAQ> employeeFAQs;
 
 }

@@ -1,5 +1,7 @@
 package com.giantlink.glintranet.entities;
 
+
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -18,6 +20,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -59,10 +62,17 @@ public class Employee {
 	@Size(min = 8, max = 200)
 	@Column(nullable = false)
 	private String password;
+	
+	//@CreationTimestamp
+	private String birthDate;
+
 
 	@Size(min = 10, max = 12)
 	@Column(nullable = false)
 	private String phoneNumber;
+	
+	@ManyToOne()
+    private Team team;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "employee_role",
@@ -71,8 +81,6 @@ public class Employee {
 	) 
 	private Set<Role> roles;
 
-	//@CreationTimestamp
-	private String birthDate;
 
 	@OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	@JsonBackReference
@@ -86,11 +94,12 @@ public class Employee {
 	@JsonBackReference
 	private Set<FeedBack> feedBacks;
 	
-	@ManyToOne()
-    private Team team;
-
 	@OneToMany(mappedBy = "employee", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	@JsonBackReference
 	private Set<Comment> comments;
+	
+	@OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonIgnore
+	private List<EmployeeFAQ> faqsList;
 
 }
