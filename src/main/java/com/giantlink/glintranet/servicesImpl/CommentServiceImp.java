@@ -10,8 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.giantlink.glintranet.entities.Comment;
+import com.giantlink.glintranet.entities.EmpNotifId;
 import com.giantlink.glintranet.entities.Employee;
+import com.giantlink.glintranet.entities.EmployeeNotification;
 import com.giantlink.glintranet.entities.FAQ;
+import com.giantlink.glintranet.entities.Notification;
 import com.giantlink.glintranet.entities.Reply;
 import com.giantlink.glintranet.mappers.CommentMapper;
 import com.giantlink.glintranet.mappers.EmployeeMapper;
@@ -20,6 +23,7 @@ import com.giantlink.glintranet.repositories.EmployeeRepository;
 import com.giantlink.glintranet.repositories.FAQRepository;
 import com.giantlink.glintranet.repositories.ReplyRepository;
 import com.giantlink.glintranet.requests.CommentRequest;
+import com.giantlink.glintranet.requests.NotificationRequest;
 import com.giantlink.glintranet.requests.ReplyRequest;
 import com.giantlink.glintranet.responses.CommentResponse;
 import com.giantlink.glintranet.responses.ReplyResponse;
@@ -43,15 +47,40 @@ public class CommentServiceImp implements CommentService {
 	@Autowired
 	CommentMapper commentMapper;
 
+	@Autowired
+	NotificationServiceImp notificationService;
+	
 	@Override
 	public CommentResponse add(CommentRequest commentRequest) {
 		Optional<FAQ> optionalFAQ = faqRepository.findById(commentRequest.getFaq_Id());
 		Optional<Employee> optionalEmp = employeeRepository.findById(commentRequest.getEmp_Id());
-
+		
 		if (optionalFAQ.isPresent()) {
 			Comment comment = Comment.builder().commentDate(commentRequest.getCommentDate())
 					.content(commentRequest.getContent()).faq(optionalFAQ.get()).employee(optionalEmp.get()).build();
-			return commentMapper.toResponse(commentRepository.save(comment));
+			
+			commentRepository.save(comment);
+			
+			NotificationRequest notificationRequest = NotificationRequest.builder()
+					.content(optionalEmp.get().getLastName() 
+							+ " " 
+							+ optionalEmp.get().getFirstName()
+							+ " a repondut à votre question"
+							)
+					.empl_id(optionalEmp.get().getId())
+					.link("/faq/faq-details/" + Long.toString(comment.getFaq().getId()))
+					.build();
+
+			Notification notification = notificationService.notifyOne(notificationRequest, optionalFAQ.get().getEmployee());
+			
+			EmpNotifId empNotifId = EmpNotifId.builder().employee_id(optionalEmp.get().getId())
+					.notification_id(notification.getId()).build();
+
+			EmployeeNotification employeeNotification = EmployeeNotification.builder().employee(optionalEmp.get())
+					.notification(notification).empNotifId(empNotifId).build();
+			notificationService.add(employeeNotification);
+			
+			return commentMapper.toResponse(comment);
 		}
 
 		return null;
@@ -123,6 +152,31 @@ public class CommentServiceImp implements CommentService {
 				.employee(employee)
 				.build();
 		Reply savedRepl = replyRepository.save(reply);
+		
+		NotificationRequest notificationRequest = NotificationRequest.builder()
+				.content(employee.getLastName() 
+						+ " " 
+						+ employee.getFirstName()
+						+ " a repondut à votre commentaire"
+						)
+				.empl_id(employee.getId())
+				.link("/faq/faq-details/" + Long.toString(savedRepl.getComment().getFaq().getId()))
+				.build();
+				
+		Notification notification = notificationService.notifyOne(notificationRequest, comment.getEmployee());
+		
+		EmpNotifId empNotifId = EmpNotifId.builder()
+				.employee_id(employee.getId())
+				.notification_id(notification.getId())
+				.build();
+		
+		EmployeeNotification employeeNotification = EmployeeNotification.builder()
+				.employee(employee)
+				.notification(notification)
+				.empNotifId(empNotifId)
+				.build();
+		notificationService.add(employeeNotification);
+		
 		ReplyResponse replyResponse = ReplyResponse.builder()
 				.id(savedRepl.getId())
 				.content(savedRepl.getContent())

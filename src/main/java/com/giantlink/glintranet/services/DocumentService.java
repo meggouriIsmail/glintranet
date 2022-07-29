@@ -1,13 +1,10 @@
 package com.giantlink.glintranet.services;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.web.multipart.MultipartFile;
 
 import com.giantlink.glintranet.entities.Document;
-import com.giantlink.glintranet.requests.DocumentRequest;
 import com.giantlink.glintranet.responses.DocResponse;
 
 public interface DocumentService 
