@@ -18,13 +18,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.giantlink.glintranet.entities.EmployeeFAQ;
+import com.giantlink.glintranet.entities.FAQ;
 import com.giantlink.glintranet.requests.FAQRequest;
 import com.giantlink.glintranet.responses.FAQResponse;
 import com.giantlink.glintranet.services.FAQService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/faq")
 @CrossOrigin(origins = { "http://localhost:4200" })
+@Tag(name = "FAQ", description = "Endpoints for managing FAQs")
 public class FAQController 
 {
 	@Autowired
@@ -45,7 +55,22 @@ public class FAQController
 	}
 
 	@GetMapping("section/{sectionId}")
-	public ResponseEntity<List<FAQResponse>> getAll(@PathVariable Long sectionId)
+	@Operation(
+			summary = "Find a FAQ",
+			description = "Find a FAQ by its Id",
+			tags = {"FAQ"},
+			responses = {
+					@ApiResponse(
+							description = "Success",
+							responseCode = "200",
+							content = @Content(mediaType = "application/json", schema = @Schema(implementation = FAQ.class))
+							
+							),
+					@ApiResponse(description = "Not Found", responseCode = "404", content = @Content),
+					@ApiResponse(description = "Internal Error", responseCode = "500", content = @Content)
+			}
+			)
+	public ResponseEntity<List<FAQResponse>> getAll(@PathVariable @Parameter(description = "The id of section that contains the FAQs") Long sectionId)
 	{
 		List<FAQResponse> response = faqService.getAllBySection(sectionId);
 		return new ResponseEntity<List<FAQResponse>>(response, HttpStatus.OK);
