@@ -8,12 +8,10 @@ import java.util.Optional;
 import javax.persistence.NonUniqueResultException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import com.giantlink.glintranet.entities.Section;
 import com.giantlink.glintranet.mappers.SectionMapper;
-import com.giantlink.glintranet.repositories.EmployeeRepository;
 import com.giantlink.glintranet.repositories.SectionRepository;
 import com.giantlink.glintranet.requests.SectionRequest;
 import com.giantlink.glintranet.responses.SectionResponse;

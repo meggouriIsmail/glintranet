@@ -107,4 +107,8 @@ public class Employee {
 	@OneToOne(mappedBy = "employee")
 	private Reply reply;
 
+	@OneToMany(mappedBy = "employee", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+	@JsonBackReference
+	private Set<Notification> notifications;
+
 }
