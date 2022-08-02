@@ -16,4 +16,8 @@ public interface NotificationService {
 	Notification notifyOne(NotificationRequest request, Employee receiver);
 	
 	List<NotificationResponse> getAllNotifications(Long employeeId);
+	
+	void readAllNotifications(Long empId);
+	
+	void readNotification(Long id);
 }

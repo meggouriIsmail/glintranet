@@ -51,12 +51,8 @@ public class NotificationServiceImp implements NotificationService {
 	@Override
 	public Notification notifyOne(NotificationRequest request, Employee receiver) {
 
-		Notification notification = Notification.builder()
-				.content(request.getContent())
-				.employee(receiver)
-				.link(request.getLink())
-				.isRead(false)
-				.build();
+		Notification notification = Notification.builder().content(request.getContent()).employee(receiver)
+				.link(request.getLink()).isRead(false).build();
 
 		return notificationRepository.save(notification);
 	}
@@ -69,7 +65,27 @@ public class NotificationServiceImp implements NotificationService {
 	@Override
 	public List<NotificationResponse> getAllNotifications(Long employeeId) {
 		Employee employee = employeeRepository.getById(employeeId);
-		return NotificationMapper.INSTANCE.toResponses(notificationRepository.findByEmployee(employee));
+		return NotificationMapper.INSTANCE.toResponses(notificationRepository.findByEmployeeAndIsRead(employee, false));
+	}
+
+	@Override
+	public void readAllNotifications(Long employeeId) {
+		Employee employee = employeeRepository.getById(employeeId);
+		
+		notificationRepository.findByEmployee(employee).forEach(notif -> {
+			if (!notif.getIsRead()) {
+				notif.setIsRead(true);
+				notificationRepository.save(notif);
+			}
+		});
+
+	}
+
+	@Override
+	public void readNotification(Long id) {
+		Notification notification = notificationRepository.getById(id);
+		notification.setIsRead(true);
+		notificationRepository.save(notification);
 	}
 
 }

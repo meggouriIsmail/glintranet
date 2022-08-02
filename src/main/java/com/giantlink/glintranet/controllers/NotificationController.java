@@ -25,7 +25,18 @@ public class NotificationController {
 	@GetMapping("/{id}")
 	public ResponseEntity<List<NotificationResponse>> getNotifications(@PathVariable Long id )
 	{
-		List<NotificationResponse> responses = notificationService.getAllNotifications(id);
-		return new ResponseEntity<List<NotificationResponse>>(responses, HttpStatus.OK);
+		return new ResponseEntity<List<NotificationResponse>>(notificationService.getAllNotifications(id), HttpStatus.OK);
+	}
+	
+	@GetMapping("/readAll/{id}")
+	public ResponseEntity<HttpStatus> readAllNotifications(@PathVariable Long id) {
+		notificationService.readAllNotifications(id);
+		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
+	}
+	
+	@GetMapping("/readNotif/{id}")
+	public ResponseEntity<HttpStatus> readNotification(@PathVariable Long id) {
+		notificationService.readNotification(id);
+		return new ResponseEntity<HttpStatus>(HttpStatus.OK);
 	}
 }
