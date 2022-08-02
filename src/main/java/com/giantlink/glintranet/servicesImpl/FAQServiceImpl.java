@@ -11,10 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.giantlink.glintranet.entities.EmpNotifId;
 import com.giantlink.glintranet.entities.Employee;
 import com.giantlink.glintranet.entities.EmployeeFAQ;
 import com.giantlink.glintranet.entities.EmployeeFaqId;
+import com.giantlink.glintranet.entities.EmployeeNotification;
 import com.giantlink.glintranet.entities.FAQ;
+import com.giantlink.glintranet.entities.Notification;
 import com.giantlink.glintranet.entities.Reply;
 import com.giantlink.glintranet.entities.Section;
 import com.giantlink.glintranet.entities.Tag;
@@ -26,6 +29,7 @@ import com.giantlink.glintranet.repositories.FAQRepository;
 import com.giantlink.glintranet.repositories.SectionRepository;
 import com.giantlink.glintranet.repositories.TagRepository;
 import com.giantlink.glintranet.requests.FAQRequest;
+import com.giantlink.glintranet.requests.NotificationRequest;
 import com.giantlink.glintranet.responses.CommentResponse;
 import com.giantlink.glintranet.responses.FAQResponse;
 import com.giantlink.glintranet.responses.ReplyResponse;
@@ -50,6 +54,9 @@ public class FAQServiceImpl implements FAQService {
 
 	@Autowired
 	FAQMapper faqMapper;
+	
+	@Autowired
+	NotificationServiceImp notificationService;
 
 	@Override
 	public FAQResponse addFaq(FAQRequest faqRequest) {
@@ -78,6 +85,31 @@ public class FAQServiceImpl implements FAQService {
 				faq.setTags(tags);
 				faqRepository.save(faq);
 			}
+			
+			NotificationRequest notificationRequest = NotificationRequest.builder()
+					.content(emp.get().getLastName() 
+							+ " " 
+							+ emp.get().getFirstName()
+							+ " a ajouté une question"
+							)
+					.empl_id(emp.get().getId())
+					.link("/faq/Allfaqs")
+					.build();
+
+			List<Notification> notifications = notificationService.notifyAll(notificationRequest);
+			notifications.forEach(notif -> {
+				EmpNotifId empNotifId = EmpNotifId.builder()
+						.employee_id(emp.get().getId())
+						.notification_id(notif.getId())
+						.build();
+				
+				EmployeeNotification employeeNotification = EmployeeNotification.builder()
+						.employee(emp.get())
+						.notification(notif)
+						.empNotifId(empNotifId)
+						.build();
+				notificationService.add(employeeNotification);
+			});
 
 			return faqMapper.entityToResponse(faq);
 		}
